@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية لموجة التصفيات</title>
+    <!-- Tailwind via CDN (for quick styling inside the iframe) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- React & ReactDOM UMD -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Recharts UMD -->
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+
+    <!-- Babel for in-browser JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+      body { background: #fafafa; }
+      .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="min-h-screen w-full p-6"></div>
+
+    <script type="text/babel">
+      const { useMemo, useState } = React;
+      const {
+        ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Tooltip: ReTooltip,
+        BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, Legend
+      } = Recharts;
+
+      // بيانات أساسية من المقال (1–9 آب 2025)
+      const baseVictims = [
+        { name: "حلب", value: 8 },
+        { name: "حمص", value: 6 },
+        { name: "ريف دمشق", value: 5 },
+        { name: "حماة", value: 3 },
+        { name: "اللاذقية", value: 2 },
+        { name: "دمشق", value: 2 },
+        { name: "طرطوس", value: 1 },
+      ];
+
+      // أبعاد استراتيجية (0–10)
+      const baseDimensions = [
+        { key: "securityVacuum", label: "فراغ أمني", score: 9, desc: "تآكل قدرة الدولة على الردع وظهور سلطات محلية متباينة." },
+        { key: "sectarianFragmentation", label: "تفكك طائفي", score: 8, desc: "تصاعد هويات صغرى وتبادل رسائل انتقامية بين المكونات." },
+        { key: "impunity", label: "إفلات من العقاب", score: 9, desc: "ضعف المساءلة القضائية وتحوّل العنف إلى نمط اعتيادي." },
+        { key: "regionalSpillover", label: "تسرّب إقليمي", score: 6, desc: "قابلية الحدود لتحويل الفوضى إلى ملفات عابرة للدول." },
+        { key: "socialContractErosion", label: "تآكل العقد الاجتماعي", score: 8, desc: "انكفاء المجتمع نحو العائلة والطائفة على حساب المواطنة." },
+        { key: "futureRisk", label: "مخاطر مستقبلية", score: 7, desc: "توارث منطق الثأر وتمدّد الحروب الصغيرة المزمنة." },
+      ];
+
+      const daysData = [
+        { day: 1, victims: 5 },
+        { day: 2, victims: 2 },
+        { day: 3, victims: 5 },
+        { day: 4, victims: 1 },
+        { day: 5, victims: 6 },
+        { day: 6, victims: 2 },
+        { day: 7, victims: 3 },
+        { day: 8, victims: 4 },
+        { day: 9, victims: -1 }, // سيُعاد ضبطه ديناميكيًا
+      ];
+
+      function App() {
+        const [weights, setWeights] = useState(Object.fromEntries(baseDimensions.map(d => [d.key, 1])));
+        const [rtl, setRtl] = useState(true);
+        const [highlight, setHighlight] = useState(null);
+
+        const dailySeries = useMemo(() => {
+          const sumFirst = daysData.slice(0, 8).reduce((a, b) => a + b.victims, 0);
+          const last = Math.max(0, 27 - sumFirst);
+          return daysData.map((d, i) => (i === 8 ? { ...d, victims: last } : d));
+        }, []);
+
+        const radarData = useMemo(() => {
+          return baseDimensions.map(d => ({
+            dimension: d.label,
+            value: Math.min(10, d.score * (weights[d.key] || 1))
+          }));
+        }, [weights]);
+
+        const totalVictims = baseVictims.reduce((a, b) => a + b.value, 0);
+
+        return (
+          <div className="mx-auto max-w-7xl space-y-6" dir={rtl ? "rtl" : "ltr"}>
+            <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold">أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية لموجة التصفيات</h1>
+                <p className="text-neutral-600 mt-1">الفترة: 1–9 آب / أغسطس 2025 — إجمالي الضحايا الموثقين: {totalVictims}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <label className="text-sm text-neutral-700">اتجاه الواجهة</label>
+                <button onClick={() => setRtl(!rtl)} className="rounded-2xl px-3 py-1.5 bg-white shadow text-sm border hover:bg-neutral-100">
+                  {rtl ? "RTL" : "LTR"}
+                </button>
+              </div>
+            </header>
+
+            <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="card p-5">
+                <h2 className="text-lg font-semibold mb-3">أوزان الأبعاد الاستراتيجية</h2>
+                <p className="text-sm text-neutral-600 mb-4">
+                  عدّل الأوزان (0.5 – 1.5) لقياس حساسية المخاطر في كل بُعد.
+                </p>
+                <div className="space-y-4">
+                  {baseDimensions.map(d => (
+                    <div key={d.key} className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">{d.label}</span>
+                        <span className="text-xs text-neutral-500">وزن: {weights[d.key].toFixed(2)}</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0.5}
+                        max={1.5}
+                        step={0.01}
+                        value={weights[d.key]}
+                        onChange={e => setWeights({ ...weights, [d.key]: Number(e.target.value) })}
+                        className="w-full"
+                      />
+                      <p className="text-xs text-neutral-600">{d.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card p-5">
+                <h2 className="text-lg font-semibold mb-3">مصفوفة المخاطر (رادار)</h2>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="dimension" tick={{ fontSize: 12 }} />
+                      <PolarRadiusAxis angle={30} domain={[0, 10]} />
+                      <ReTooltip formatter={(v) => [`${v} / 10`, "المستوى"]} />
+                      <Radar name="المخاطر" dataKey="value" stroke="#1f2937" fill="#1f2937" fillOpacity={0.35} />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className="text-xs text-neutral-600 mt-2">قياس مركّب لمستوى المخاطر عبر الأبعاد الستة استنادًا إلى تقييمات المقال وإشاراته النوعية.</p>
+              </div>
+
+              <div className="card p-5">
+                <h2 className="text-lg font-semibold mb-3">التطور اليومي (1–9 آب)</h2>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={dailySeries} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" tickFormatter={(d) => `يوم ${d}`} />
+                      <YAxis allowDecimals={false} />
+                      <ReTooltip formatter={(v) => [v, "ضحايا"]} labelFormatter={(l) => `اليوم ${l}`} />
+                      <Line type="monotone" dataKey="victims" stroke="#111827" dot />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className="text-xs text-neutral-600 mt-2">يوضح التذبذب اليومي ويُستخدم كمدخل بصري لوتيرة التصعيد.</p>
+              </div>
+            </section>
+
+            <section className="card p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold">توزيع الضحايا حسب المحافظات</h2>
+                <div className="flex gap-2 flex-wrap">
+                  {baseVictims.map(g => (
+                    <button
+                      key={g.name}
+                      onMouseEnter={() => setHighlight(g.name)}
+                      onMouseLeave={() => setHighlight(null)}
+                      className={"text-xs px-2 py-1 rounded-full border " + (highlight === g.name ? "bg-neutral-900 text-white" : "bg-white")}
+                      title={"إبراز: " + g.name}
+                    >
+                      {g.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={baseVictims} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis allowDecimals={false} />
+                    <ReTooltip formatter={(v) => [v, "ضحايا"]} />
+                    <Legend />
+                    <Bar dataKey="value" name="عدد الضحايا" fill="#0f172a" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <p className="text-xs text-neutral-600 mt-2">
+                تحوّل الأرقام إلى خريطة إدراكية: تكدّس الحالات في حلب وحمص يشير إلى هشاشة البنى الأمنية وتقاطعات الثأر المحلي.
+              </p>
+            </section>
+
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {baseDimensions.map((d, idx) => (
+                <div key={d.key} className="card p-5">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">{d.label}</h3>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-neutral-900 text-white">
+                      {Math.round(d.score * (weights[d.key] || 1))}/10
+                    </span>
+                  </div>
+                  <p className="text-sm text-neutral-700">{d.desc}</p>
+                </div>
+              ))}
+            </section>
+
+            <footer className="text-xs text-neutral-500 pt-2">
+              صُمّم هذا الأنفوغرافيك لدعم مادّة فيتشر تحليلية ويربط بين الوقائع (1–9 آب 2025) والأبعاد الاستراتيجية: فراغ أمني، تفكك طائفي، إفلات من العقاب، تسرّب إقليمي، تآكل العقد الاجتماعي، مخاطر مستقبلية.
+            </footer>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
