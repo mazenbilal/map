@@ -5,19 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>أنفوغرافيك – الأبعاد الاستراتيجية</title>
   <style>
-    html, body, #root { height: 100%; margin: 0; background:#fafafa; }
+    html, body, #root { height: 100%; margin: 0; background:#fafafa; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
     .card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; padding:16px; box-shadow:0 1px 8px rgba(0,0,0,.06); }
+    .err { background: #fff3f3; color:#b00020; border:1px solid #f1c0c0; padding:12px; border-radius:12px; margin:16px; }
   </style>
-  <!-- مكتبات UMD من CDN (لا تحتاج Build) -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+
+  <!-- React/ReactDOM عبر jsDelivr (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Recharts عبر jsDelivr (UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/recharts/umd/Recharts.min.js"></script>
 </head>
 <body>
-  <div id="root"><noscript>هذا المحتوى يحتاج JavaScript</noscript></div>
+  <div id="root"><noscript>هذا المحتوى يحتاج JavaScript مفعّل.</noscript></div>
 
   <script>
+    // طبقة أمان: إظهار سبب المشكلة بدلاً من صفحة بيضاء
+    function showError(msg) {
+      const box = document.createElement('div');
+      box.className = 'err';
+      box.innerText = msg;
+      document.body.prepend(box);
+    }
+
+    // تحقق من تحميل المكتبات
+    if (!window.React) {
+      showError('فشل تحميل React. تحقق من اتصالك أو جرب شبكة مختلفة.');
+    }
+    if (!window.ReactDOM) {
+      showError('فشل تحميل ReactDOM.');
+    }
+    if (!window.Recharts) {
+      showError('فشل تحميل Recharts (مكتبة الرسوم). قد يكون الحجب من الشبكة. جرب VPN أو افتح من متصفح آخر.');
+    }
+
+    if (!(window.React && window.ReactDOM && window.Recharts)) {
+      // إيقاف التنفيذ إن كانت المكتبات غير متاحة
+      throw new Error('Required libraries did not load.');
+    }
+
+    const { createElement: h, useState, useMemo } = React;
+    const {
+      ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+      Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LineChart, Line
+    } = Recharts;
+
     // بيانات المقال
     const baseVictims = [
       { name: "حلب", value: 8 },
@@ -30,21 +64,15 @@
     ];
     const total = baseVictims.reduce((a,b)=>a+b.value,0);
 
-    const { createElement: h, useState, useMemo } = React;
-    const {
-      ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-      Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, LineChart, Line
-    } = Recharts;
-
     function App(){
       const [w, setW] = useState({vac:1, sect:1, imp:1, reg:1, soc:1, fut:1});
       const dims = [
-        {k:'vac',  name:'فراغ أمني',           score:9},
-        {k:'sect', name:'تفكك طائفي',          score:8},
-        {k:'imp',  name:'إفلات من العقاب',     score:9},
-        {k:'reg',  name:'تسرب إقليمي',         score:6},
-        {k:'soc',  name:'تآكل العقد الاجتماعي',score:8},
-        {k:'fut',  name:'مخاطر مستقبلية',      score:7},
+        {k:'vac',  name:'فراغ أمني',           score:9, desc:'تآكل قدرة الدولة على الردع.'},
+        {k:'sect', name:'تفكك طائفي',          score:8, desc:'تصاعد الهويات الصغرى.'},
+        {k:'imp',  name:'إفلات من العقاب',     score:9, desc:'ضعف المساءلة القضائية.'},
+        {k:'reg',  name:'تسرّب إقليمي',        score:6, desc:'قابلية الحدود للتوظيف.'},
+        {k:'soc',  name:'تآكل العقد الاجتماعي',score:8, desc:'الانكفاء للعائلة والطائفة.'},
+        {k:'fut',  name:'مخاطر مستقبلية',      score:7, desc:'توريث منطق الثأر.'},
       ];
       const radarData = useMemo(()=>dims.map(d=>({
         dim:d.name, val: Math.min(10, d.score*(w[d.k]||1))
@@ -58,7 +86,7 @@
         h('h1', {style:{margin:'6px 0 2px'}}, 'أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية لموجة التصفيات'),
         h('div', {style:{color:'#555', marginBottom:12}}, `الفترة: 1–9 آب 2025 — إجمالي الضحايا: ${total}`),
 
-        // مخطط الرادار
+        // رادار
         h('div', {className:'card', style:{marginBottom:12}},
           h('h3', null, 'مصفوفة المخاطر (رادار)'),
           h('div', {style:{height:320}},
@@ -82,12 +110,13 @@
                 type:'range', min:0.5, max:1.5, step:0.01, value:w[d.k],
                 onInput:(e)=>setW({...w, [d.k]: Number(e.target.value)}),
                 style:{width:'100%'}
-              })
+              }),
+              h('div', {style:{fontSize:12, color:'#666', marginTop:4}}, d.desc)
             ))
           )
         ),
 
-        // التوزيع الزمني
+        // خط زمني
         h('div', {className:'card', style:{marginBottom:12}},
           h('h3', null, 'التطور اليومي (1–9 آب)'),
           h('div', {style:{height:260}},
@@ -122,7 +151,13 @@
       );
     }
 
-    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    // بدء التطبيق
+    try {
+      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+    } catch (e) {
+      showError('فشل بدء التطبيق: ' + (e && e.message ? e.message : e));
+      console.error(e);
+    }
   </script>
 </body>
 </html>
