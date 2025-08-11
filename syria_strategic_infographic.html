@@ -6,222 +6,199 @@
   <title>أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية</title>
 
   <!-- React & ReactDOM (UMD) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
   <!-- Recharts (UMD) -->
   <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
 
   <style>
-    :root { --bg:#fafafa; --card:#fff; --border:#e5e7eb; --text:#111827; --muted:#6b7280; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    .row { display: grid; grid-template-columns: 1fr; gap: 24px; }
-    @media (min-width: 1000px) { .row-3 { grid-template-columns: 1fr 1fr 1fr; } }
-    .card { background: var(--card); border:1px solid var(--border); border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.05); padding: 16px; }
-    h1 { font-size: 24px; margin: 0 0 4px; }
-    h2 { font-size: 18px; margin: 0 0 8px; }
-    h3 { font-size: 16px; margin: 0; }
-    .muted { color: var(--muted); font-size: 12px; }
-    .flex { display: flex; align-items: center; gap: 8px; }
-    .between { justify-content: space-between; }
-    .slider { width: 100%; }
-    .pill { border:1px solid var(--border); border-radius: 999px; padding: 4px 10px; font-size: 12px; background:#fff; cursor: pointer; }
-    .btn { border:1px solid var(--border); background:#fff; padding:6px 10px; border-radius: 12px; cursor:pointer; }
-    .grid-3 { display:grid; grid-template-columns:1fr; gap:16px; }
-    @media (min-width: 900px){ .grid-3{ grid-template-columns: 1fr 1fr 1fr; } }
-    .chip { background:#111827; color:#fff; border-radius: 999px; font-size: 11px; padding: 2px 8px; }
+    :root{--bg:#fafafa;--card:#fff;--border:#e5e7eb;--text:#111827;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    #root{min-height:100vh}              /* ارتفاع أدنى للحاوية الرئيسية */
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .row{display:grid;grid-template-columns:1fr;gap:24px}
+    @media (min-width:1000px){.row-3{grid-template-columns:1fr 1fr 1fr}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:16px}
+    h1{font-size:24px;margin:0 0 4px} h2{font-size:18px;margin:0 0 8px} h3{font-size:16px;margin:0}
+    .muted{color:var(--muted);font-size:12px}
+    .flex{display:flex;align-items:center;gap:8px}
+    .between{justify-content:space-between}
+    .slider{width:100%}
+    .pill{border:1px solid var(--border);border-radius:999px;padding:4px 10px;font-size:12px;background:#fff;cursor:pointer}
+    .btn{border:1px solid var(--border);background:#fff;padding:6px 10px;border-radius:12px;cursor:pointer}
+    .grid-3{display:grid;grid-template-columns:1fr;gap:16px}
+    @media (min-width:900px){.grid-3{grid-template-columns:1fr 1fr 1fr}}
+    .chip{background:#111827;color:#fff;border-radius:999px;font-size:11px;padding:2px 8px}
   </style>
 </head>
 <body>
   <div id="root"></div>
 
   <script>
-    (function () {
-      const e = React.createElement;
-      const {
-        ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Tooltip,
-        BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, Legend
-      } = Recharts;
+  (function () {
+    const e = React.createElement;
+    const {
+      ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Tooltip,
+      BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, Legend
+    } = Recharts;
 
-      // البيانات من المقال (1–9 آب 2025)
-      const baseVictims = [
-        { name: "حلب", value: 8 },
-        { name: "حمص", value: 6 },
-        { name: "ريف دمشق", value: 5 },
-        { name: "حماة", value: 3 },
-        { name: "اللاذقية", value: 2 },
-        { name: "دمشق", value: 2 },
-        { name: "طرطوس", value: 1 },
-      ];
+    // بيانات مثالية (قابلة للتعديل)
+    const baseVictims = [
+      { name: "حلب", value: 8 }, { name: "حمص", value: 6 }, { name: "ريف دمشق", value: 5 },
+      { name: "حماة", value: 3 }, { name: "اللاذقية", value: 2 }, { name: "دمشق", value: 2 }, { name: "طرطوس", value: 1 },
+    ];
 
-      const baseDimensions = [
-        { key: "securityVacuum", label: "فراغ أمني", score: 9, desc: "تآكل قدرة الدولة على الردع وظهور سلطات محلية متباينة." },
-        { key: "sectarianFragmentation", label: "تفكك طائفي", score: 8, desc: "تصاعد هويات صغرى وتبادل رسائل انتقامية بين المكونات." },
-        { key: "impunity", label: "إفلات من العقاب", score: 9, desc: "ضعف المساءلة القضائية وتحوّل العنف إلى نمط اعتيادي." },
-        { key: "regionalSpillover", label: "تسرّب إقليمي", score: 6, desc: "قابلية الحدود لتحويل الفوضى إلى ملفات عابرة للدول." },
-        { key: "socialContractErosion", label: "تآكل العقد الاجتماعي", score: 8, desc: "انكفاء المجتمع نحو العائلة والطائفة على حساب المواطنة." },
-        { key: "futureRisk", label: "مخاطر مستقبلية", score: 7, desc: "توارث منطق الثأر وتمدّد الحروب الصغيرة المزمنة." },
-      ];
+    const baseDimensions = [
+      { key:"securityVacuum", label:"فراغ أمني", score:9, desc:"تآكل قدرة الدولة على الردع وظهور سلطات محلية." },
+      { key:"sectarianFragmentation", label:"تفكك طائفي", score:8, desc:"تصاعد هويات صغرى وتبادل رسائل انتقامية." },
+      { key:"impunity", label:"إفلات من العقاب", score:9, desc:"ضعف المساءلة القضائية وتحوّل العنف إلى نمط اعتيادي." },
+      { key:"regionalSpillover", label:"تسرّب إقليمي", score:6, desc:"قابلية الحدود لتحويل الفوضى إلى ملفات عابرة للدول." },
+      { key:"socialContractErosion", label:"تآكل العقد الاجتماعي", score:8, desc:"انكفاء المجتمع نحو العائلة والطائفة على حساب المواطنة." },
+      { key:"futureRisk", label:"مخاطر مستقبلية", score:7, desc:"توارث منطق الثأر وتمدّد الحروب الصغيرة." },
+    ];
 
-      const daysDataBase = [
-        { day: 1, victims: 5 },
-        { day: 2, victims: 2 },
-        { day: 3, victims: 5 },
-        { day: 4, victims: 1 },
-        { day: 5, victims: 6 },
-        { day: 6, victims: 2 },
-        { day: 7, victims: 3 },
-        { day: 8, victims: 4 },
-        { day: 9, victims: -1 }, // سيُضبط ديناميكيًا ليكتمل المجموع 27
-      ];
+    const daysDataBase = [
+      { day:1, victims:5 }, { day:2, victims:2 }, { day:3, victims:5 },
+      { day:4, victims:1 }, { day:5, victims:6 }, { day:6, victims:2 },
+      { day:7, victims:3 }, { day:8, victims:4 }, { day:9, victims:-1 } // يُضبط لاحقاً
+    ];
 
-      function useMemo(fn, deps) {
-        // React.useMemo مباشرة
-        return React.useMemo(fn, deps);
-      }
+    function App(){
+      const [weights, setWeights] = React.useState(Object.fromEntries(baseDimensions.map(d => [d.key, 1])));
+      const [rtl, setRtl] = React.useState(true);
 
-      function App() {
-        const [weights, setWeights] = React.useState(Object.fromEntries(baseDimensions.map(d => [d.key, 1])));
-        const [rtl, setRtl] = React.useState(true);
+      const dailySeries = React.useMemo(()=>{
+        const sumFirst = daysDataBase.slice(0,8).reduce((a,b)=>a+b.victims,0);
+        const last = Math.max(0, 27 - sumFirst);
+        return daysDataBase.map((d,i)=> (i===8 ? {...d, victims:last} : d));
+      },[]);
 
-        const dailySeries = useMemo(() => {
-          const sumFirst = daysDataBase.slice(0, 8).reduce((a, b) => a + b.victims, 0);
-          const last = Math.max(0, 27 - sumFirst);
-          return daysDataBase.map((d, i) => (i === 8 ? { ...d, victims: last } : d));
-        }, []);
+      const radarData = React.useMemo(()=>{
+        return baseDimensions.map(d=>({
+          dimension:d.label,
+          value: Math.min(10, d.score * (weights[d.key] || 1))
+        }));
+      },[weights]);
 
-        const radarData = useMemo(() => {
-          return baseDimensions.map(d => ({
-            dimension: d.label,
-            value: Math.min(10, d.score * (weights[d.key] || 1))
-          }));
-        }, [weights]);
+      const totalVictims = baseVictims.reduce((a,b)=>a+b.value,0);
 
-        const totalVictims = baseVictims.reduce((a, b) => a + b.value, 0);
-
-        return e("div", { className: "wrap", dir: rtl ? "rtl" : "ltr" },
-          // Header
-          e("div", { className: "flex between", style: { marginBottom: 16, flexWrap: "wrap", gap: 12 } },
-            e("div", null,
-              e("h1", null, "أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية لموجة التصفيات"),
-              e("div", { className: "muted" }, `الفترة: 1–9 آب / أغسطس 2025 — إجمالي الضحايا الموثقين: ${totalVictims}`)
-            ),
-            e("div", { className: "flex" },
-              e("span", { className: "muted" }, "اتجاه الواجهة"),
-              e("button", {
-                className: "btn",
-                onClick: () => setRtl(!rtl)
-              }, rtl ? "RTL" : "LTR")
-            )
+      return e("div",{className:"wrap",dir: rtl ? "rtl":"ltr"},
+        // Header
+        e("div",{className:"flex between",style:{marginBottom:16,flexWrap:"wrap",gap:12}},
+          e("div",null,
+            e("h1",null,"أنفوغرافيك تفاعلي – الأبعاد الاستراتيجية لموجة التصفيات"),
+            e("div",{className:"muted"},`الفترة: 1–9 آب / أغسطس 2025 — إجمالي الضحايا الموثقين: ${totalVictims}`)
           ),
-
-          // Row: sliders + radar + line
-          e("div", { className: "row row-3" },
-            // Sliders
-            e("div", { className: "card" },
-              e("h2", null, "أوزان الأبعاد الاستراتيجية"),
-              e("div", { className: "muted", style: { marginBottom: 8 } }, "عدّل الأوزان (0.5 – 1.5) لقياس حساسية المخاطر."),
-              ...baseDimensions.map(d =>
-                e("div", { key: d.key, style: { marginBottom: 12 } },
-                  e("div", { className: "flex between" },
-                    e("span", { style: { fontSize: 14, fontWeight: 600 } }, d.label),
-                    e("span", { className: "muted" }, `وزن: ${weights[d.key].toFixed(2)}`)
-                  ),
-                  e("input", {
-                    className: "slider",
-                    type: "range", min: 0.5, max: 1.5, step: 0.01,
-                    value: weights[d.key],
-                    onChange: (ev) => setWeights(Object.assign({}, weights, { [d.key]: Number(ev.target.value) }))
-                  }),
-                  e("div", { className: "muted" }, d.desc)
-                )
-              )
-            ),
-
-            // Radar
-            e("div", { className: "card" },
-              e("h2", null, "مصفوفة المخاطر (رادار)"),
-              e("div", { style: { height: 288 } },
-                e(ResponsiveContainer, { width: "100%", height: "100%" },
-                  e(RadarChart, { cx: "50%", cy: "50%", outerRadius: "80%", data: radarData },
-                    e(PolarGrid, null),
-                    e(PolarAngleAxis, { dataKey: "dimension", tick: { fontSize: 12 } }),
-                    e(PolarRadiusAxis, { angle: 30, domain: [0, 10] }),
-                    e(Tooltip, { formatter: (v) => [`${v} / 10`, "المستوى"] }),
-                    e(Radar, { name: "المخاطر", dataKey: "value", stroke: "#1f2937", fill: "#1f2937", fillOpacity: 0.35 })
-                  )
-                )
-              ),
-              e("div", { className: "muted", style: { marginTop: 8 } }, "قياس مركّب لمستوى المخاطر عبر الأبعاد الستة.")
-            ),
-
-            // Line
-            e("div", { className: "card" },
-              e("h2", null, "التطور اليومي (1–9 آب)"),
-              e("div", { style: { height: 288 } },
-                e(ResponsiveContainer, { width: "100%", height: "100%" },
-                  e(LineChart, { data: dailySeries, margin: { top: 10, right: 20, left: 0, bottom: 0 } },
-                    e(CartesianGrid, { strokeDasharray: "3 3" }),
-                    e(XAxis, { dataKey: "day", tickFormatter: (d) => `يوم ${d}` }),
-                    e(YAxis, { allowDecimals: false }),
-                    e(Tooltip, { formatter: (v) => [v, "ضحايا"], labelFormatter: (l) => `اليوم ${l}` }),
-                    e(Line, { type: "monotone", dataKey: "victims", stroke: "#111827", dot: true })
-                  )
-                )
-              ),
-              e("div", { className: "muted", style: { marginTop: 8 } }, "يوضح التذبذب اليومي ويخدم قراءة وتيرة التصعيد.")
-            )
-          ),
-
-          // Bar by governorate
-          e("div", { className: "card", style: { marginTop: 24 } },
-            e("div", { className: "flex between", style: { marginBottom: 12, flexWrap: "wrap", gap: 8 } },
-              e("h2", null, "توزيع الضحايا حسب المحافظات"),
-              e("div", { className: "flex", style: { flexWrap: "wrap", gap: 8 } },
-                ...baseVictims.map(g =>
-                  e("button", { key: g.name, className: "pill", title: "إبراز: " + g.name }, g.name)
-                )
-              )
-            ),
-            e("div", { style: { height: 320 } },
-              e(ResponsiveContainer, { width: "100%", height: "100%" },
-                e(BarChart, { data: baseVictims, margin: { top: 10, right: 20, left: 0, bottom: 0 } },
-                  e(CartesianGrid, { strokeDasharray: "3 3" }),
-                  e(XAxis, { dataKey: "name" }),
-                  e(YAxis, { allowDecimals: false }),
-                  e(Tooltip, { formatter: (v) => [v, "ضحايا"] }),
-                  e(Legend, null),
-                  e(Bar, { dataKey: "value", name: "عدد الضحايا", fill: "#0f172a" })
-                )
-              )
-            ),
-            e("div", { className: "muted", style: { marginTop: 8 } }, "تكدّس الحالات في حلب وحمص يلمّح لهشاشة البنى الأمنية وتقاطعات الثأر المحلي.")
-          ),
-
-          // Dimension cards
-          e("div", { className: "grid-3", style: { marginTop: 24 } },
-            ...baseDimensions.map((d) =>
-              e("div", { key: d.key, className: "card" },
-                e("div", { className: "flex between", style: { marginBottom: 8 } },
-                  e("h3", null, d.label),
-                  e("span", { className: "chip" }, Math.round(d.score * (weights[d.key] || 1)) + "/10")
-                ),
-                e("div", { style: { fontSize: 14 } }, d.desc)
-              )
-            )
-          ),
-
-          // Footer
-          e("div", { className: "muted", style: { marginTop: 12 } },
-            "يربط هذا العرض بين وقائع 1–9 آب 2025 والأبعاد: فراغ أمني، تفكك طائفي، إفلات من العقاب، تسرّب إقليمي، تآكل العقد الاجتماعي، مخاطر مستقبلية."
+          e("div",{className:"flex"},
+            e("span",{className:"muted"},"اتجاه الواجهة"),
+            e("button",{className:"btn",onClick:()=>setRtl(!rtl)}, rtl?"RTL":"LTR")
           )
-        );
-      }
+        ),
 
-      ReactDOM.createRoot(document.getElementById("root")).render(e(App));
-    })();
+        // Sliders + Radar + Line
+        e("div",{className:"row row-3"},
+
+          // Sliders
+          e("div",{className:"card"},
+            e("h2",null,"أوزان الأبعاد الاستراتيجية"),
+            e("div",{className:"muted",style:{marginBottom:8}},"عدّل الأوزان (0.5 – 1.5) لقياس حساسية المخاطر."),
+            ...baseDimensions.map(d=>
+              e("div",{key:d.key,style:{marginBottom:12}},
+                e("div",{className:"flex between"},
+                  e("span",{style:{fontSize:14,fontWeight:600}},d.label),
+                  e("span",{className:"muted"},`وزن: ${Number(weights[d.key]).toFixed(2)}`)
+                ),
+                e("input",{
+                  className:"slider", type:"range", min:0.5, max:1.5, step:0.01,
+                  value:weights[d.key],
+                  onChange:(ev)=> setWeights({...weights,[d.key]: Number(ev.target.value)})
+                }),
+                e("div",{className:"muted"}, d.desc)
+              )
+            )
+          ),
+
+          // Radar
+          e("div",{className:"card"},
+            e("h2",null,"مصفوفة المخاطر (رادار)"),
+            e("div",{style:{height:288}},                     // ارتفاع صريح
+              e(ResponsiveContainer,{width:"100%",height:"100%"},
+                e(RadarChart,{cx:"50%",cy:"50%",outerRadius:"80%",data:radarData},
+                  e(PolarGrid,null),
+                  e(PolarAngleAxis,{dataKey:"dimension",tick:{fontSize:12}}),
+                  e(PolarRadiusAxis,{angle:30,domain:[0,10]}),
+                  e(Tooltip,{formatter:(v)=>[`${v} / 10`,"المستوى"]}),
+                  e(Radar,{name:"المخاطر",dataKey:"value",stroke:"#1f2937",fill:"#1f2937",fillOpacity:0.35})
+                )
+              )
+            ),
+            e("div",{className:"muted",style:{marginTop:8}},"قياس مركّب لمستوى المخاطر عبر الأبعاد الستة.")
+          ),
+
+          // Line
+          e("div",{className:"card"},
+            e("h2",null,"التطور اليومي (1–9 آب)"),
+            e("div",{style:{height:288}},                     // ارتفاع صريح
+              e(ResponsiveContainer,{width:"100%",height:"100%"},
+                e(LineChart,{data:dailySeries,margin:{top:10,right:20,left:0,bottom:0}},
+                  e(CartesianGrid,{strokeDasharray:"3 3"}),
+                  e(XAxis,{dataKey:"day",tickFormatter:(d)=>`يوم ${d}`}),
+                  e(YAxis,{allowDecimals:false}),
+                  e(Tooltip,{formatter:(v)=>[v,"ضحايا"],labelFormatter:(l)=>`اليوم ${l}`}),
+                  e(Line,{type:"monotone",dataKey:"victims",stroke:"#111827",dot:true})
+                )
+              )
+            ),
+            e("div",{className:"muted",style:{marginTop:8}},"يوضح التذبذب اليومي ويخدم قراءة وتيرة التصعيد.")
+          )
+        ),
+
+        // Bar by governorate
+        e("div",{className:"card",style:{marginTop:24}},
+          e("div",{className:"flex between",style:{marginBottom:12,flexWrap:"wrap",gap:8}},
+            e("h2",null,"توزيع الضحايا حسب المحافظات"),
+            e("div",{className:"flex",style:{flexWrap:"wrap",gap:8}},
+              ...baseVictims.map(g=> e("button",{key:g.name,className:"pill",title:"إبراز: "+g.name},g.name))
+            )
+          ),
+          e("div",{style:{height:320}},                       // ارتفاع صريح
+            e(ResponsiveContainer,{width:"100%",height:"100%"},
+              e(BarChart,{data:baseVictims,margin:{top:10,right:20,left:0,bottom:0}},
+                e(CartesianGrid,{strokeDasharray:"3 3"}),
+                e(XAxis,{dataKey:"name"}), e(YAxis,{allowDecimals:false}),
+                e(Tooltip,{formatter:(v)=>[v,"ضحايا"]}), e(Legend,null),
+                e(Bar,{dataKey:"value",name:"عدد الضحايا",fill:"#0f172a"})
+              )
+            )
+          ),
+          e("div",{className:"muted",style:{marginTop:8}},"تكدّس الحالات في حلب وحمص يلمّح لهشاشة البنى الأمنية وتقاطعات الثأر المحلي.")
+        ),
+
+        // Dimension cards
+        e("div",{className:"grid-3",style:{marginTop:24}},
+          ...baseDimensions.map(d=>
+            e("div",{key:d.key,className:"card"},
+              e("div",{className:"flex between",style:{marginBottom:8}},
+                e("h3",null,d.label),
+                e("span",{className:"chip"}, Math.round(d.score*(weights[d.key]||1))+"/10")
+              ),
+              e("div",{style:{fontSize:14}}, d.desc)
+            )
+          )
+        ),
+
+        // Footer
+        e("div",{className:"muted",style:{marginTop:12}},
+          "يربط هذا العرض بين وقائع 1–9 آب 2025 والأبعاد: فراغ أمني، تفكك طائفي، إفلات من العقاب، تسرّب إقليمي، تآكل العقد الاجتماعي، مخاطر مستقبلية."
+        )
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(e(App));
+  })();
   </script>
 </body>
 </html>
