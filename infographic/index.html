@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<meta charset="utf-8">
+<title>Test – Infographic (No libs)</title>
+<style>
+  body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#fafafa;margin:0}
+  .wrap{max-width:800px;margin:24px auto;background:#fff;border:1px solid #eee;border-radius:12px;padding:16px}
+  .bar{height:28px;background:#111827;margin:6px 0;border-radius:8px;color:#fff;display:flex;align-items:center;justify-content:flex-end;padding-inline:8px}
+  .bar span{font-size:12px;opacity:.9;margin-inline-start:8px}
+</style>
+<div class="wrap">
+  <h1>توزيع الضحايا (اختبار دون مكتبات)</h1>
+  <div id="chart"></div>
+  <p style="color:#666;font-size:13px">إذا رأيت الأعمدة السوداء، فالنشر يعمل وسنحوّل لاحقًا إلى النسخة التفاعلية.</p>
+</div>
+<script>
+const data = [
+  ["حلب",8],["حمص",6],["ريف دمشق",5],["حماة",3],["اللاذقية",2],["دمشق",2],["طرطوس",1]
+];
+const max = Math.max(...data.map(d=>d[1]));
+const chart = document.getElementById('chart');
+data.forEach(([name,val])=>{
+  const row = document.createElement('div');
+  row.style.display='grid'; row.style.gridTemplateColumns='120px 1fr'; row.style.alignItems='center';
+  const label=document.createElement('div'); label.textContent=name; label.style.fontSize='14px';
+  const bar=document.createElement('div'); bar.className='bar'; bar.style.width=(val/max*100)+'%'; bar.textContent=val;
+  row.appendChild(label); row.appendChild(bar); chart.appendChild(row);
+});
+</script>
