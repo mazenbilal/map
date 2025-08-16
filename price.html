@@ -1,0 +1,53 @@
+<!-- تضمين مكتبة Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="dollarChart" width="600" height="400"></canvas>
+
+<script>
+  const ctx = document.getElementById('dollarChart').getContext('2d');
+
+  const data = {
+    labels: ['دمشق (من 10350 إلى 10525)', 'حلب (من 10350 إلى 10525)', 'الحسكة (من 10825 إلى 10875)'],
+    datasets: [{
+      label: 'متوسط سعر الصرف (ليرة سورية)',
+      data: [10437.5, 10437.5, 10850],
+      backgroundColor: ['#5B84B1', '#7E9BA6', '#B85042'],
+      borderWidth: 1
+    }]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true
+        },
+        title: {
+          display: true,
+          text: 'فوارق سعر صرف الدولار في السوق الموازية حسب المحافظات - آب 2025',
+          font: {
+            size: 18
+          },
+          padding: {
+            top: 10,
+            bottom: 20
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: 'ليرة سورية لكل دولار'
+          }
+        }
+      }
+    }
+  };
+
+  new Chart(ctx, config);
+</script>
