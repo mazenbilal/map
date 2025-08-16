@@ -1,0 +1,52 @@
+<h2 style="text-align: center;">رسم بياني تفاعلي: توزيع المقاتلين الأجانب في سوريا وتأثيرهم على الهوية الوطنية</h2>
+<canvas id="foreignFightersChart" width="800" height="400"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('foreignFightersChart').getContext('2d');
+  const data = {
+    labels: [
+      'أوروبيون وغربيون',
+      'آسيويون (أويغور، باكستانيون، إندونيسيون)',
+      'عرب (مصريون، سعوديون، تونسيون، مغاربة)',
+      'قوقازيون وشيشانيون',
+      'إجمالي التقديرات'
+    ],
+    datasets: [
+      {
+        label: 'عدد المقاتلين',
+        data: [2500, 3000, 4500, 1500, 11500],
+        backgroundColor: '#4F46E5'
+      },
+      {
+        label: 'تأثيرهم على الهوية (%)',
+        data: [30, 60, 80, 50, 100],
+        backgroundColor: '#22C55E'
+      }
+    ]
+  };
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              let value = context.parsed.x;
+              return label + ': ' + (label.includes('%') ? value + '%' : value + ' مقاتل');
+            }
+          }
+        },
+        legend: { position: 'bottom' }
+      },
+      scales: {
+        x: { beginAtZero: true }
+      }
+    }
+  };
+  new Chart(ctx, config);
+</script>
