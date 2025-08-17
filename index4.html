@@ -1,0 +1,32 @@
+<canvas id="demographyChart" width="600" height="400"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('demographyChart');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: [2010, 2015, 2020, 2024, 2025],
+    datasets: [
+      {
+        label: 'النزوح (% من السكان)',
+        data: [1, 20, 40, 60, 75],
+        borderColor: 'red',
+        fill: false
+      },
+      {
+        label: 'السيادة الوطنية (%)',
+        data: [90, 70, 55, 40, 30],
+        borderColor: 'blue',
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      tooltip: { enabled: true },
+      legend: { position: 'bottom' }
+    }
+  }
+});
+</script>
