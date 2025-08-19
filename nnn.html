@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body{font-family:Arial, sans-serif; background:#f9fafb; margin:0; padding:0;}
+    #chart{width:100%; max-width:900px; margin:40px auto;}
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <script>
+    var years = [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+    var production = [5.0, 2.8, 2.8, 2.4, 2.0, 1.9, 1.8, 1.6, 1.3, 1.22, 1.5, 1.4];
+
+    var trace = {
+      x: years,
+      y: production,
+      type: 'scatter',
+      mode: 'lines+markers',
+      marker: {size:8, color:'#1d4ed8'},
+      line: {width:3, color:'#1d4ed8'},
+      name: 'الإنتاج (مليون طن)'
+    };
+
+    var layout = {
+      title: "من الاكتفاء إلى العجز البنيوي: مسار إنتاج القمح في سوريا",
+      xaxis: {title: "السنة"},
+      yaxis: {title: "الإنتاج (مليون طن)", rangemode: "tozero"},
+      hovermode: "x unified",
+      shapes: [
+        {
+          type: 'line',
+          x0: 2011,
+          x1: 2011,
+          y0: 0,
+          y1: 5,
+          line: {color: 'red', dash: 'dot'}
+        },
+        {
+          type: 'line',
+          x0: 2021,
+          x1: 2021,
+          y0: 0,
+          y1: 5,
+          line: {color: 'orange', dash: 'dot'}
+        }
+      ],
+      annotations: [
+        {
+          x: 2010, y: 5.0,
+          text: "ذروة الإنتاج ~5 مليون طن",
+          showarrow: true, arrowhead: 2
+        },
+        {
+          x: 2011, y: 2.8,
+          text: "اندلاع الحرب",
+          showarrow: true, arrowhead: 2
+        },
+        {
+          x: 2019, y: 1.22,
+          text: "أدنى مستوى",
+          showarrow: true, arrowhead: 2
+        },
+        {
+          x: 2021, y: 1.4,
+          text: "أسوأ موجة جفاف منذ 30 عامًا",
+          showarrow: true, arrowhead: 2
+        }
+      ]
+    };
+
+    Plotly.newPlot('chart', [trace], layout, {responsive: true});
+  </script>
+</body>
+</html>
