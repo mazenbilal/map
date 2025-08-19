@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    :root{--ink:#0f172a; --bg:#f6f7f9; --card:#fff; --muted:#667085; --accent:#111827}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    .wrap{max-width:1000px;margin:28px auto;padding:0 12px}
+    .hdr{margin:0 0 8px;font-weight:700;font-size:20px}
+    .sub{color:var(--muted);font-size:13px;margin:4px 0 14px}
+    #chart{background:var(--card);border-radius:14px;box-shadow:0 6px 18px rgba(15,23,42,.06);padding:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="hdr">من “تقلّبات 2015–2022” إلى تقديرات 2024/2025</h1>
+    <div class="sub">الإنتاج (مليون طن). الأرقام 2018/2019، 2023/2024، 2024/2025 كما في النص. يتضمن خطوطًا مرجعية: ذروة 2010 (=5.0) وخط −40% (=3.0).</div>
+    <div id="chart"></div>
+  </div>
+
+  <script>
+    // نقاط أساسية كما وردت في الفقرة
+    const labels = ["2015–2022", "2018/2019", "2023/2024", "2024/2025*"];
+    const production = [null, 1.22, 3.03, 3.00]; // * تقديري/أولي
+
+    // منحنى الإنتاج (يركّز على النقاط المصرّح بها في النص)
+    const prodTrace = {
+      x: labels,
+      y: production,
+      type: "scatter",
+      mode: "lines+markers",
+      name: "الإنتاج (مليون طن)",
+      line: { width: 3 },
+      marker: { size: 8 },
+      hovertemplate:
+        "<b>%{x}</b><br>" +
+        "الإنتاج: <b>%{y:.2f}</b> مليون طن" +
+        "<extra></extra>"
+    };
+
+    // رمز يوضح أن فترة 2015–2022 كانت «متقلبة» دون قيم سنوية محددة
+    const bandShape = {
+      type: "rect",
+      xref: "x",
+      yref: "paper",
+      x0: "2015–2022",
+      x1: "2018/2019",
+      y0: 0,
+      y1: 1,
+      fillcolor: "rgba(2,132,199,0.06)", // تظليل خفيف
+      line: { width: 0 }
+    };
+
+    // خطوط مرجعية: ذروة 2010 (=5) وخط −40% (=3)
+    const peakLine = {
+      type: "line",
+      xref: "paper",
+      yref: "y",
+      x0: 0, x1: 1, y0: 5.0, y1: 5.0,
+      line: { dash: "dot", width: 2 }
+    };
+    const minus40Line = {
+      type: "line",
+      xref: "paper",
+      yref: "y",
+      x0: 0, x1: 1, y0: 3.0, y1: 3.0,
+      line: { dash: "dot", width: 2 }
+    };
+
+    // تعليقات تفسيرية
+    const annotations = [
+      {
+        x: "2018/2019", y: 1.22, ax: 0, ay: -35,
+        text: "قاع 2018/2019 ≈ 1.22",
+        showarrow: true, arrowhead: 2
+      },
+      {
+        x: "2023/2024", y: 3.03, ax: 0, ay: -35,
+        text: "تحسّن نسبي 2023/2024 ≈ 3.03",
+        showarrow: true, arrowhead: 2
+      },
+      {
+        x: "2024/2025*", y: 3.00, ax: 0, ay: -35,
+        text: "تقدير أولي 2024/2025 ≈ 3.00",
+        showarrow: true, arrowhead: 2
+      },
+      {
+        xref: "paper", yref: "y", x: 1.01, y: 5.0, xanchor: "left",
+        text: "ذروة 2010 = 5.0", showarrow: false, font: { size: 12 }
+      },
+      {
+        xref: "paper", yref: "y", x: 1.01, y: 3.0, xanchor: "left",
+        text: "−40% من الذروة ≈ 3.0", showarrow: false, font: { size: 12 }
+      },
+      {
+        x: "2015–2022", yref: "paper", y: 1.06, showarrow: false,
+        text: "فترة تقلّبات 2015–2022", font: { size: 12 }
+      }
+    ];
+
+    // شارة/تعليق للجفاف وتأثيره على المساحات المزروعة والغلة
+    const droughtNote = {
+      x: "2024/2025*", y: 3.00, ax: 180, ay: -80,
+      text:
+        "الجفاف الأسوأ منذ 36 عامًا:\n" +
+        "• مزروع فعليًا: حتى 40% فقط في بعض المناطق (الحسكة/حمص)\n" +
+        "• المساحة: ~1.4 مليون هكتار\n" +
+        "• الغلة: ~2.14 طن/هكتار",
+      showarrow: true, arrowhead: 2
+    };
+    annotations.push(droughtNote);
+
+    const layout = {
+      title: { text: "إنتاج القمح في سوريا: قاع 2018/2019 وتعافٍ نسبي حتى تقديرات 2024/2025", x: 0.5 },
+      margin: { t: 60, r: 20, b: 60, l: 60 },
+      xaxis: {
+        title: "المواسم/الفترات",
+        tickangle: -15
+      },
+      yaxis: {
+        title: "الإنتاج (مليون طن)",
+        rangemode: "tozero"
+      },
+      hovermode: "x unified",
+      shapes: [bandShape, peakLine, minus40Line],
+      annotations: annotations
+    };
+
+    Plotly.newPlot("chart", [prodTrace], layout, {responsive: true});
+  </script>
+</body>
+</html>
