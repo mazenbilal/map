@@ -1,33 +1,96 @@
-<div id="chart" style="width:100%;max-width:700px;"></div>
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script>
-var data = [
-  {
-    type: 'scatterpolar',
-    r: [8, 7, 8, 6, 7, 9, 10],
-    theta: ['الهوية الوطنية','القرار السيادي','شرعية المفاوض','الغطاء الإقليمي','التوازن العسكري','الملف الفلسطيني','الجولان'],
-    fill: 'toself',
-    name: '1973–2008'
-  },
-  {
-    type: 'scatterpolar',
-    r: [4, 3, 5, 7, 4, 3, 2],
-    theta: ['الهوية الوطنية','القرار السيادي','شرعية المفاوض','الغطاء الإقليمي','التوازن العسكري','الملف الفلسطيني','الجولان'],
-    fill: 'toself',
-    name: '2025'
-  }
-];
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>رادار المقاربة الاستراتيجية – سوريا/إسرائيل</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    :root{--bg:#0b1220;--card:#0f172a;--ink:#e5e7eb;--muted:#94a3b8}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .card{background:var(--card);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:16px}
+    .hdr{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+    h1{font-size:18px;margin:0}
+    .sub{color:var(--muted);font-size:13px;margin-top:4px}
+    #chart{width:100%;max-width:1200px;height:68vh;min-height:420px}
+    @media (max-width:768px){ #chart{height:62vh;min-height:380px} }
+    @media (max-width:480px){ #chart{height:60vh;min-height:340px} }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hdr">
+        <div>
+          <h1>المقاربة الاستراتيجية بين الماضي واليوم</h1>
+          <div class="sub">مقارنة رادارية بين مرحلتي 1973–2008 و2025 عبر محاور سياسية–أمنية</div>
+        </div>
+      </div>
+      <div id="chart" role="img" aria-label="رسم راداري للمقارنة الاستراتيجية"></div>
+    </div>
+  </div>
 
-var layout = {
-  polar: {
-    radialaxis: {
-      visible: true,
-      range: [0, 10]
+  <script>
+  // === عدّل محاور الرادار هنا عند الحاجة ===
+  const categories = [
+    "الجولان",
+    "الملف الفلسطيني",
+    "القرار الدولي",
+    "شرعية النظام",
+    "العقيدة الأمنية",
+    "التوازن الإقليمي",
+    "الدعم العسكري",
+    "الوساطة"
+  ];
+
+  // القيم (0 إلى 10) — أبقِ الطول مساوياً لعدد المحاور
+  const seriesA = [8, 7, 8, 6, 7, 9, 10, 7];   // 1973–2008
+  const seriesB = [4, 3, 5, 7, 4, 3, 2, 5];    // 2025
+
+  const data = [
+    {
+      type: "scatterpolar",
+      r: seriesA,
+      theta: categories,
+      name: "1973–2008",
+      fill: "toself",
+      hovertemplate: "<b>%{theta}</b><br>القيمة: %{r}<extra></extra>"
+    },
+    {
+      type: "scatterpolar",
+      r: seriesB,
+      theta: categories,
+      name: "2025",
+      fill: "toself",
+      hovertemplate: "<b>%{theta}</b><br>القيمة: %{r}<extra></extra>"
     }
-  },
-  showlegend: true,
-  title: 'مقارنة استراتيجية بين المسارين السوري - الإسرائيلي'
-};
+  ];
 
-Plotly.newPlot("chart", data, layout);
-</script>
+  const layout = {
+    paper_bgcolor: "rgba(0,0,0,0)",
+    plot_bgcolor: "rgba(0,0,0,0)",
+    font: {family: "Tahoma, Arial, sans-serif", size: 13, color: "#e5e7eb"},
+    legend: {orientation: "h", x: 0.5, xanchor: "center", y: -0.1},
+    margin: {l: 10, r: 10, t: 10, b: 40},
+    polar: {
+      bgcolor: "rgba(15,23,42,.35)",
+      radialaxis: {
+        visible: true,
+        range: [0, 10],
+        tickfont: {size: 11},
+        gridcolor: "rgba(255,255,255,.12)",
+        linecolor: "rgba(255,255,255,.2)"
+      },
+      angularaxis: {
+        tickfont: {size: 12},
+        gridcolor: "rgba(255,255,255,.12)",
+        linecolor: "rgba(255,255,255,.2)"
+      }
+    }
+  };
+
+  Plotly.newPlot("chart", data, layout, {responsive: true, displayModeBar: true});
+  </script>
+</body>
+</html>
