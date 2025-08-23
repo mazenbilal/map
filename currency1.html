@@ -3,126 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>إنفوغراف حذف الأصفار من الليرة السورية</title>
+  <title>سلايدر حذف الأصفار من الليرة</title>
   <style>
     body {
       margin: 0;
       font-family: 'Cairo', sans-serif;
-      background: #f9fafb;
+      background: #f8fafb;
       color: #1e293b;
-    }
-
-    .container {
-      max-width: 960px;
-      margin: 30px auto;
-      padding: 20px;
     }
 
     h1 {
       text-align: center;
+      font-size: 24px;
+      margin: 24px 0;
       color: #0f172a;
-      font-size: 28px;
-      margin-bottom: 24px;
-      animation: fadeIn 1.5s ease-out;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+    .carousel-container {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      scroll-behavior: smooth;
     }
 
-    .box {
+    .card {
+      scroll-snap-align: start;
+      flex: 0 0 300px;
       background: white;
       border-radius: 16px;
-      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transform: translateY(40px);
-      opacity: 0;
-      animation: slideUp 0.8s forwards;
+      transition: transform 0.3s ease;
     }
 
-    .box:nth-child(1) { animation-delay: 0.2s; }
-    .box:nth-child(2) { animation-delay: 0.4s; }
-    .box:nth-child(3) { animation-delay: 0.6s; }
-    .box:nth-child(4) { animation-delay: 0.8s; }
-    .box:nth-child(5) { animation-delay: 1s; }
+    .card:hover {
+      transform: scale(1.04);
+    }
 
     .icon {
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    .title {
-      font-size: 20px;
-      font-weight: bold;
-      color: #1d4ed8;
+      font-size: 40px;
       margin-bottom: 10px;
     }
 
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1d4ed8;
+      margin-bottom: 6px;
+    }
+
     .desc {
-      font-size: 16px;
+      font-size: 15px;
       color: #475569;
-    }
-
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     .footer {
       text-align: center;
-      margin-top: 32px;
-      font-size: 15px;
+      margin-top: 24px;
+      font-size: 14px;
       color: #64748b;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        flex: 0 0 260px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📉 حذف الأصفار من الليرة السورية – هل هو إصلاح أم قفزة في الفراغ؟</h1>
-    
-    <div class="grid">
-      <div class="box">
-        <div class="icon">💵</div>
-        <div class="title">الخطة</div>
-        <div class="desc">استبدال ورقة 5000 ل.س بأخرى من فئة 50، عبر حذف صفرين في ديسمبر 2025.</div>
-      </div>
+  <h1>📉 حذف الأصفار من الليرة السورية – سلايدر بصري</h1>
 
-      <div class="box">
-        <div class="icon">🎯</div>
-        <div class="title">الهدف الرسمي</div>
-        <div class="desc">تبسيط المعاملات، جذب الكتلة النقدية من السوق الموازي، ومحو الرموز السابقة.</div>
-      </div>
-
-      <div class="box">
-        <div class="icon">⚠️</div>
-        <div class="title">التحديات</div>
-        <div class="desc">لا إصلاح اقتصادي حقيقي، 40 تريليون ليرة خارج المصارف، وانعدام الثقة بالمؤسسات.</div>
-      </div>
-
-      <div class="box">
-        <div class="icon">🌍</div>
-        <div class="title">مقارنة دولية</div>
-        <div class="desc">تركيا (2005): نجاح. الأرجنتين: فشل متكرر. سوريا؟ غموض اقتصادي كبير.</div>
-      </div>
-
-      <div class="box">
-        <div class="icon">🖨️</div>
-        <div class="title">الطباعة في موسكو</div>
-        <div class="desc">إصدار العملة الجديدة عبر "غوزناك" الروسية يعزز التبعية الاقتصادية للكرملين.</div>
-      </div>
+  <div class="carousel-container">
+    <div class="card">
+      <div class="icon">💵</div>
+      <div class="title">الخطة</div>
+      <div class="desc">استبدال 5000 ل.س بورقة 50 ل.س بعد حذف صفرين في ديسمبر 2025.</div>
     </div>
 
-    <div class="footer">✍️ لا تُبنى الثقة عبر الحذف، بل عبر السياسات والإصلاح الحقيقي.</div>
+    <div class="card">
+      <div class="icon">🎯</div>
+      <div class="title">الهدف</div>
+      <div class="desc">تبسيط التعاملات، جذب الكتلة النقدية، وإزالة رموز النظام السابق.</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">⚠️</div>
+      <div class="title">التحديات</div>
+      <div class="desc">40 تريليون ليرة خارج النظام المصرفي واقتصاد موازٍ متجذر.</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🌍</div>
+      <div class="title">مقارنة دولية</div>
+      <div class="desc">تركيا نجحت في 2005. الأرجنتين فشلت. سوريا في اختبار غامض.</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🖨️</div>
+      <div class="title">الطباعة</div>
+      <div class="desc">طباعة العملة الجديدة في روسيا تعني تبعية اقتصادية إضافية.</div>
+    </div>
+
+    <div class="card">
+      <div class="icon">🔍</div>
+      <div class="title">الخلاصة</div>
+      <div class="desc">الحذف لا يعوّض غياب الإصلاح، ولا يبني الثقة المفقودة منذ سنوات.</div>
+    </div>
   </div>
+
+  <div class="footer">🧠 حرّك لليمين أو اليسار لاستكشاف البطاقات 📲</div>
 </body>
 </html>
