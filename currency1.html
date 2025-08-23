@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>إنفوغراف متحرك – حذف الأصفار من الليرة</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #f8fafc, #e2e8f0);
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 28px;
+      text-align: center;
+      color: #0f172a;
+      margin-bottom: 40px;
+      animation: fadeInDown 1s ease forwards;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.07);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: slideUp 0.7s ease forwards;
+    }
+
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.4s; }
+    .card:nth-child(4) { animation-delay: 0.6s; }
+    .card:nth-child(5) { animation-delay: 0.8s; }
+    .card:nth-child(6) { animation-delay: 1s; }
+    .card:nth-child(7) { animation-delay: 1.2s; }
+
+    .card h2 {
+      font-size: 20px;
+      color: #1d4ed8;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .flag-box {
+      background: #f9fafb;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .flag-box:hover {
+      transform: scale(1.05);
+    }
+
+    .flag-box strong {
+      font-size: 16px;
+      display: block;
+      color: #0f172a;
+      margin-bottom: 6px;
+    }
+
+    .flag-box small {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 15px;
+      color: #475569;
+      margin-top: 40px;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes slideUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 24px;
+      }
+      .card h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>📊 حذف الأصفار من العملة السورية – إنفوغراف تفاعلي ومتحرك</h1>
+
+    <div class="card">
+      <h2>💡 ما هي الخطة؟</h2>
+      <p>حذف صفرين من الليرة السورية في ديسمبر 2025، لتصبح الورقة من 5000 → 50 ليرة.</p>
+    </div>
+
+    <div class="card">
+      <h2>🎯 الهدف الرسمي</h2>
+      <p>تبسيط التعاملات، جذب الأموال من السوق الموازية، محو الرموز القديمة وتثبيت شرعية سياسية جديدة.</p>
+    </div>
+
+    <div class="card">
+      <h2>⚠️ التحديات والمخاطر</h2>
+      <p>غياب إصلاح اقتصادي حقيقي، 40 تريليون ليرة خارج النظام المصرفي، اقتصاد موازٍ متجذر، فقدان الثقة.</p>
+    </div>
+
+    <div class="card">
+      <h2>🌍 مقارنة دولية</h2>
+      <div class="comparison">
+        <div class="flag-box">
+          <strong>🇹🇷 تركيا (2005)</strong>
+          <small>حذف 6 أصفار – ناجح بفضل النمو الاقتصادي</small>
+        </div>
+        <div class="flag-box">
+          <strong>🇦🇷 الأرجنتين</strong>
+          <small>حذف متكرر – فشل بسبب غياب الإصلاح</small>
+        </div>
+        <div class="flag-box">
+          <strong>🇸🇾 سوريا</strong>
+          <small>صفران فقط – لا خطة واضحة حتى الآن</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🖨️ الطباعة في موسكو؟</h2>
+      <p>بحسب رويترز، الاتفاق مع "غوزناك" الروسية تم، ما يعزز التبعية الاقتصادية والسياسية لموسكو.</p>
+    </div>
+
+    <div class="card">
+      <h2>🔍 الخلاصة</h2>
+      <p>حذف الأصفار قد يُجمّل المشهد مؤقتًا، لكن بدون إصلاح بنيوي، ستبقى الليرة عرضة للانهيار وفقدان الثقة.</p>
+    </div>
+
+    <div class="footer-note">🧠 الإصلاح الحقيقي يبدأ من السياسات لا من مطابع النقود.</div>
+  </div>
+</body>
+</html>
