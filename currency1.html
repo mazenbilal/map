@@ -1,75 +1,41 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إنفوغراف تفاعلي - حذف الأصفار من الليرة السورية</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>رسم بياني تفاعلي – حذف الأصفار</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      font-family: 'Cairo', sans-serif;
       background: #f9fafb;
-      color: #1e293b;
+      font-family: 'Cairo', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 40px;
     }
     h2 {
       text-align: center;
-      margin-bottom: 32px;
-      color: #0f172a;
+      margin-bottom: 24px;
+      color: #1e293b;
     }
-    .chart-box {
-      max-width: 800px;
-      margin: 40px auto;
+    .chart-container {
+      max-width: 700px;
+      margin: auto;
       background: #fff;
-      padding: 24px;
+      padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-    canvas {
-      max-width: 100%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-
-  <h2>📊 حذف الأصفار من العملة السورية – إنفوغراف تفاعلي</h2>
-
-  <div class="chart-box">
-    <h3>💰 حجم الكتلة النقدية خارج النظام المصرفي</h3>
-    <canvas id="moneyChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <h3>🌍 مقارنة تجارب الحذف في ثلاث دول</h3>
-    <canvas id="compareChart"></canvas>
-  </div>
-
-  <div class="chart-box">
-    <h3>⚙️ مصادر الاقتصاد الموازي</h3>
-    <canvas id="parallelChart"></canvas>
+  <div class="chart-container">
+    <h2>مقارنة تجارب حذف الأصفار من العملة</h2>
+    <canvas id="zeroChart"></canvas>
   </div>
 
   <script>
-    // 1. Doughnut chart – الكتلة النقدية
-    new Chart(document.getElementById("moneyChart"), {
-      type: 'doughnut',
-      data: {
-        labels: ['خارج المصارف (40 تريليون)', 'داخل النظام الرسمي'],
-        datasets: [{
-          data: [40, 10],
-          backgroundColor: ['#ef4444', '#10b981'],
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-
-    // 2. Bar comparison – الدول الثلاث
-    new Chart(document.getElementById("compareChart"), {
+    const ctx = document.getElementById('zeroChart');
+    new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['تركيا', 'الأرجنتين', 'سوريا'],
@@ -80,7 +46,7 @@
             backgroundColor: '#3b82f6'
           },
           {
-            label: 'نجاح التجربة (0 = فشل، 10 = نجاح)',
+            label: 'نجاح التجربة (0-10)',
             data: [8, 2, 3],
             backgroundColor: '#f59e0b'
           }
@@ -88,35 +54,28 @@
       },
       options: {
         responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: (tooltipItem) =>
+                `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
+            }
           }
         },
-        plugins: {
-          legend: { position: 'bottom' }
-        }
-      }
-    });
-
-    // 3. Pie – مصادر الاقتصاد الموازي
-    new Chart(document.getElementById("parallelChart"), {
-      type: 'pie',
-      data: {
-        labels: ['سوق الصرف', 'التحويلات', 'التهريب'],
-        datasets: [{
-          data: [45, 30, 25],
-          backgroundColor: ['#ec4899', '#8b5cf6', '#22d3ee']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { position: 'bottom' }
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'القيمة'
+            }
+          }
         }
       }
     });
   </script>
-
 </body>
 </html>
