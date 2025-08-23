@@ -3,38 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>رسم بياني تفاعلي – حذف الأصفار</title>
+  <title>رسم بياني تفاعلي</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
-      background: #f9fafb;
-      font-family: 'Cairo', sans-serif;
       margin: 0;
-      padding: 40px;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
     }
+
+    .chart-wrapper {
+      width: 100%;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
     h2 {
       text-align: center;
-      margin-bottom: 24px;
+      font-size: 20px;
+      margin-bottom: 12px;
       color: #1e293b;
-    }
-    .chart-container {
-      max-width: 700px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
   </style>
 </head>
 <body>
-  <div class="chart-container">
-    <h2>مقارنة تجارب حذف الأصفار من العملة</h2>
-    <canvas id="zeroChart"></canvas>
+  <div class="chart-wrapper">
+    <h2>📊 مقارنة حذف الأصفار من العملة</h2>
+    <div class="chart-container">
+      <canvas id="zeroChart"></canvas>
+    </div>
   </div>
 
   <script>
     const ctx = document.getElementById('zeroChart');
+
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -43,35 +58,51 @@
           {
             label: 'عدد الأصفار المحذوفة',
             data: [6, 3, 2],
-            backgroundColor: '#3b82f6'
+            backgroundColor: '#3b82f6',
+            borderRadius: 8
           },
           {
             label: 'نجاح التجربة (0-10)',
             data: [8, 2, 3],
-            backgroundColor: '#f59e0b'
+            backgroundColor: '#f59e0b',
+            borderRadius: 8
           }
         ]
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'bottom',
+            labels: {
+              font: { size: 14 }
+            }
           },
           tooltip: {
+            enabled: true,
+            rtl: true,
             callbacks: {
-              label: (tooltipItem) =>
-                `${tooltipItem.dataset.label}: ${tooltipItem.raw}`
+              label: (context) =>
+                `${context.dataset.label}: ${context.raw}`
             }
           }
         },
         scales: {
+          x: {
+            ticks: { font: { size: 13 } }
+          },
           y: {
             beginAtZero: true,
             title: {
               display: true,
               text: 'القيمة'
-            }
+            },
+            ticks: { font: { size: 13 } }
           }
         }
       }
