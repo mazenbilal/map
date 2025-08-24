@@ -1,15 +1,102 @@
-<h3 style="margin:0 0 8px">الرسم التفاعلي</h3>
-<div style="position:relative;padding-top:56.25%;height:0;overflow:hidden;border:1px solid #e5e7eb;border-radius:12px">
-  <iframe
-    src="https://yourdomain.com/path/to/syria-violence-aug2025.html"
-    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
-    loading="lazy"
-    referrerpolicy="no-referrer"
-    sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock">
-  </iframe>
-</div>
-<noscript>
-  <p>لفتح الرسم مباشرةً: 
-    <a href="https://yourdomain.com/path/to/syria-violence-aug2025.html" target="_blank" rel="noopener">اضغط هنا</a>
-  </p>
-</noscript>
+
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ديناميات العنف الأهلي في سوريا – آب 2025</title>
+  <style>
+    :root {
+      --bg: #f9fafb;
+      --card: #fff;
+      --ink: #1e293b;
+      --accent: #dc2626;
+      --grid: #e5e7eb;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      padding: 16px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 24px;
+    }
+    h2 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>ديناميات العنف الأهلي في سوريا – آب 2025</h2>
+    <p>يوضح الرسم التالي عدد ضحايا العنف الأهلي في المحافظات السورية المختلفة خلال شهر آب 2025.</p>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const data = {"المحافظة": ["حمص", "حماة", "دمشق وريفها", "حلب", "اللاذقية", "محافظات أخرى"], "عدد الضحايا": [22, 15, 15, 12, 4, 3]};
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data["المحافظة"],
+        datasets: [{
+          label: 'عدد الضحايا',
+          data: data["عدد الضحايا"],
+          backgroundColor: 'rgba(220, 38, 38, 0.7)',
+          borderColor: 'rgba(220, 38, 38, 1)',
+          borderWidth: 1,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return 'الضحايا: ' + context.parsed.y;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 5
+            },
+            title: {
+              display: true,
+              text: 'عدد الضحايا'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'المحافظات'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
