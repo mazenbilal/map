@@ -1,36 +1,92 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تبدل التوازن الإقليمي</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: "Tahoma", Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background: #f9f9f9;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+  </style>
+</head>
+<body>
+  <h2>تبدل التوازن الإقليمي (1974–2024)</h2>
+  <canvas id="balanceChart"></canvas>
+  <p style="color: gray; font-size: 14px;">
+    القيم تقريبية وتعبر عن ميزان القوى النسبي بين سوريا وإسرائيل عبر العقود.
+  </p>
 
-// البيانات تعبر بشكل تقريبي عن تبدل التوازن الإقليمي منذ 1974
-const data = [
-  { year: 1974, Syria: 70, Israel: 75 },
-  { year: 1982, Syria: 60, Israel: 85 },
-  { year: 1991, Syria: 55, Israel: 80 },
-  { year: 2000, Syria: 50, Israel: 82 },
-  { year: 2011, Syria: 40, Israel: 88 },
-  { year: 2020, Syria: 25, Israel: 92 },
-  { year: 2024, Syria: 10, Israel: 95 },
-];
+  <script>
+    const ctx = document.getElementById("balanceChart").getContext("2d");
 
-export default function RegionalBalanceChart() {
-  return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold text-center mb-4">
-        تبدل التوازن الإقليمي (1974–2024)
-      </h1>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="year" />
-          <YAxis domain={[0, 100]} />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="Syria" stroke="#e53e3e" strokeWidth={3} dot={true} name="سوريا" />
-          <Line type="monotone" dataKey="Israel" stroke="#3182ce" strokeWidth={3} dot={true} name="إسرائيل" />
-        </LineChart>
-      </ResponsiveContainer>
-      <p className="text-sm text-gray-600 text-center mt-2">
-        القيم تقريبية وتعبر عن ميزان القوى النسبي بين سوريا وإسرائيل عبر العقود.
-      </p>
-    </div>
-  );
-}
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: [1974, 1982, 1991, 2000, 2011, 2020, 2024],
+        datasets: [
+          {
+            label: "سوريا",
+            data: [70, 60, 55, 50, 40, 25, 10],
+            borderColor: "red",
+            backgroundColor: "rgba(255,0,0,0.3)",
+            fill: false,
+            tension: 0.3
+          },
+          {
+            label: "إسرائيل",
+            data: [75, 85, 80, 82, 88, 92, 95],
+            borderColor: "blue",
+            backgroundColor: "rgba(0,0,255,0.3)",
+            fill: false,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            mode: "index",
+            intersect: false
+          },
+          legend: {
+            labels: {
+              font: { size: 14 }
+            }
+          }
+        },
+        interaction: {
+          mode: "nearest",
+          axis: "x",
+          intersect: false
+        },
+        scales: {
+          y: {
+            min: 0,
+            max: 100,
+            title: {
+              display: true,
+              text: "مستوى القوة النسبي"
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: "السنة"
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
