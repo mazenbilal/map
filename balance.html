@@ -1,0 +1,36 @@
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+
+// البيانات تعبر بشكل تقريبي عن تبدل التوازن الإقليمي منذ 1974
+const data = [
+  { year: 1974, Syria: 70, Israel: 75 },
+  { year: 1982, Syria: 60, Israel: 85 },
+  { year: 1991, Syria: 55, Israel: 80 },
+  { year: 2000, Syria: 50, Israel: 82 },
+  { year: 2011, Syria: 40, Israel: 88 },
+  { year: 2020, Syria: 25, Israel: 92 },
+  { year: 2024, Syria: 10, Israel: 95 },
+];
+
+export default function RegionalBalanceChart() {
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <h1 className="text-xl font-bold text-center mb-4">
+        تبدل التوازن الإقليمي (1974–2024)
+      </h1>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="year" />
+          <YAxis domain={[0, 100]} />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="Syria" stroke="#e53e3e" strokeWidth={3} dot={true} name="سوريا" />
+          <Line type="monotone" dataKey="Israel" stroke="#3182ce" strokeWidth={3} dot={true} name="إسرائيل" />
+        </LineChart>
+      </ResponsiveContainer>
+      <p className="text-sm text-gray-600 text-center mt-2">
+        القيم تقريبية وتعبر عن ميزان القوى النسبي بين سوريا وإسرائيل عبر العقود.
+      </p>
+    </div>
+  );
+}
