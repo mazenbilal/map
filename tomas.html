@@ -1,0 +1,66 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { ResponsiveContainer, Radar, RadarChart, PolarGrid, PolarAngleAxis, Tooltip } from "recharts";
+
+// البيانات تعكس المحاور الرئيسية في المقال: الاقتصاد، الجغرافيا، الثقافة، الأمن، النفوذ الخارجي
+const data = [
+  { subject: "الاقتصاد", Brak: 85, Geography: 40 },
+  { subject: "الجغرافيا", Brak: 30, Geography: 95 },
+  { subject: "الثقافة والهويات", Brak: 45, Geography: 90 },
+  { subject: "الأمن والحدود", Brak: 50, Geography: 85 },
+  { subject: "النفوذ الخارجي", Brak: 60, Geography: 80 }
+];
+
+export default function SyriaUSPolicyChart() {
+  const [showBrak, setShowBrak] = useState(true);
+  const [showGeography, setShowGeography] = useState(true);
+
+  return (
+    <Card className="w-full max-w-xl mx-auto p-4 rounded-2xl shadow-lg">
+      <CardContent>
+        <h2 className="text-xl font-bold mb-2 text-center">
+          تناقض الرؤية الأمريكية في سوريا: الاقتصاد مقابل الجغرافيا
+        </h2>
+        <ResponsiveContainer width="100%" height={400}>
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="subject" />
+            {showBrak && (
+              <Radar
+                name="رؤية براك (الاقتصاد)"
+                dataKey="Brak"
+                stroke="#8884d8"
+                fill="#8884d8"
+                fillOpacity={0.6}
+              />
+            )}
+            {showGeography && (
+              <Radar
+                name="منطق الجغرافيا"
+                dataKey="Geography"
+                stroke="#82ca9d"
+                fill="#82ca9d"
+                fillOpacity={0.6}
+              />
+            )}
+            <Tooltip />
+          </RadarChart>
+        </ResponsiveContainer>
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            onClick={() => setShowBrak(!showBrak)}
+            className="px-3 py-1 bg-indigo-500 text-white rounded-lg shadow"
+          >
+            {showBrak ? "إخفاء رؤية براك" : "إظهار رؤية براك"}
+          </button>
+          <button
+            onClick={() => setShowGeography(!showGeography)}
+            className="px-3 py-1 bg-green-500 text-white rounded-lg shadow"
+          >
+            {showGeography ? "إخفاء منطق الجغرافيا" : "إظهار منطق الجغرافيا"}
+          </button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
