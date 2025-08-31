@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>من بن لادن إلى الشرع: خريطة خطاب زيدان</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --fg:#e7ecf6;
+      --muted:#9fb0cc;
+      --accent:#4da3ff;
+      --accent2:#6be6c1;
+      --card:#141b34;
+      --grid:#2a3559;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:"Tajawal",system-ui,-apple-system,"Segoe UI",Roboto,"Noto Naskh Arabic",Arial,sans-serif}
+    .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .hero{
+      display:flex;flex-direction:column;gap:8px;margin-bottom:10px
+    }
+    h1{font-size:clamp(20px,5vw,28px);line-height:1.35;margin:8px 0}
+    p{color:var(--muted);margin:0}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:12px}
+    .grid{
+      display:grid;grid-template-columns:1fr;gap:12px
+    }
+    @media(min-width:900px){
+      .grid{grid-template-columns:2fr 1fr}
+    }
+    .chart{height:58vh;min-height:380px}
+    .legend{
+      display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:flex-start
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);font-size:13px;color:var(--fg)
+    }
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--accent)}
+    .dot.g2{background:var(--accent2)}
+    .note{font-size:12px;color:#c7d4ecb3;line-height:1.6}
+    .footer{font-size:12px;color:#9bb1d9b3;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px}
+    a{color:#9ad0ff;text-decoration:none}
+    .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    button{
+      all:unset;cursor:pointer;font-size:13px;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1)
+    }
+    button.active{background:rgba(109,193,255,0.18);border-color:#4da3ff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>من بن لادن إلى الشرع: خريطة تفاعلية لخطاب أحمد موفق زيدان</h1>
+      <p>تجميع بصري لأبرز محاور المقال: الهيمنة، الخارج، العنف، التطبيع، حلّ الإخوان، وسردية "سوريا الجديدة". حرّك المؤشر فوق النقاط لقراءة المقتطفات.</p>
+    </section>
+
+    <div class="grid">
+      <div class="card">
+        <div id="chart" class="chart" role="img" aria-label="مخطط يوضح شدة المحاور عبر المقتطفات"></div>
+        <div class="legend" aria-hidden="true" style="margin-top:10px">
+          <span class="pill"><span class="dot"></span> شدة المحور</span>
+          <span class="pill"><span class="dot g2"></span> التأييد/الرفض في الخطاب</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <strong style="display:block;margin-bottom:8px">تصفية العبارات حسب المحور</strong>
+        <div class="btns" id="filters"></div>
+        <div class="note" style="margin-top:10px">
+          • كل نقطة تمثل عبارة محورية من المقال، مصنّفة على محاور ستة.<br/>
+          • المحور الأفقي = التسلسل الموضوعي، والعمودي = شدة الحضور (0–100).<br/>
+          • اللون الثاني يعكس نبرة الخطاب (تأييد خارجي/رفض داخلي… إلخ).<br/>
+          • الإطار متجاوب بالكامل ومناسب للجوّالات.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>© Souria Al-Ghad — رسم تفاعلي/RTL</span>
+      <span>تقنية: <a href="https://echarts.apache.org" target="_blank" rel="noopener">Apache ECharts</a></span>
+    </div>
+  </div>
+
+  <!-- ECharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script>
+    const items = [
+      {x:1,  axis:"إعادة الهيمنة", y:92, tone:20, text:"ذوبان الأحزاب والفصائل في دولة مركزية واحدة."},
+      {x:2,  axis:"الاستجابة للخارج", y:88, tone:70, text:"مواءمة الخطاب مع الإقليم والغرب أكثر من الداخل."},
+      {x:3,  axis:"تبرير القوة", y:84, tone:65, text:"نفي المسؤولية وتحميلها للفصائل غير المنضبطة."},
+      {x:4,  axis:"التطبيع/1974", y:76, tone:60, text:"أولوية فضّ الاشتباك وتجميد النزاع بلا أفق تحرّري."},
+      {x:5,  axis:"حلّ الإخوان", y:80, tone:55, text:"قرار ظرفي يواكب المناخ الإقليمي والدولي."},
+      {x:6,  axis:"سوريا الجديدة", y:86, tone:30, text:"وحدة قسرية تُقصي الكيانات الوسيطة والمجتمع السياسي."},
+      {x:7,  axis:"رمزيات تاريخية", y:62, tone:40, text:"استدعاء الحديبية لتبرير قرار سياسي معاصر."},
+      {x:8,  axis:"تجربة إدلب", y:68, tone:25, text:"تحويل نموذج هيمنة فصائلية إلى قصة نجاح دولة."},
+      {x:9,  axis:"الامتنان للخارج", y:72, tone:75, text:"بنية سلطة قائمة على رعاة إقليميين ودوليين."},
+      {x:10, axis:"البعد الشخصي", y:58, tone:35, text:"سيرة ناقل خطاب الجهادية إلى ناطق باسم الدولة الوليدة."},
+      {x:11, axis:"خلاصة", y:90, tone:20, text:"خطاب يَعِد بالديموقراطية ويؤسس لهيمنة جديدة."}
+    ];
+
+    const axes = ["إعادة الهيمنة","الاستجابة للخارج","تبرير القوة","التطبيع/1974","حلّ الإخوان","سوريا الجديدة","رمزيات تاريخية","تجربة إدلب","الامتنان للخارج","البعد الشخصي","خلاصة"];
+
+    const filtersEl = document.getElementById('filters');
+    axes.forEach(ax=>{
+      const b=document.createElement('button');
+      b.textContent=ax;
+      b.dataset.axis=ax;
+      b.onclick=()=>toggleAxis(ax,b);
+      filtersEl.appendChild(b);
+    });
+
+    let activeAxes=new Set(axes);
+    function toggleAxis(ax,btn){
+      if(activeAxes.has(ax)){ activeAxes.delete(ax); btn.classList.remove('active'); }
+      else{ activeAxes.add(ax); btn.classList.add('active'); }
+      render();
+    }
+    Array.from(filtersEl.children).forEach(b=>b.classList.add('active'));
+
+    const chart = echarts.init(document.getElementById('chart'), null, {renderer:'canvas'});
+
+    function render(){
+      const filtered = items.filter(d=>activeAxes.has(d.axis));
+      const option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          confine: true,
+          formatter: (p)=>{
+            const d = filtered[p.dataIndex];
+            return `
+              <div style="direction:rtl;text-align:right">
+                <div style="font-weight:700;margin-bottom:6px">${d.axis}</div>
+                <div style="opacity:.85">${d.text}</div>
+                <hr style="border:none;border-top:1px solid rgba(255,255,255,.15);margin:8px 0">
+                <div>شدة المحور: <b>${d.y}</b> / 100</div>
+                <div>نبرة الخطاب: <b>${d.tone}</b> / 100</div>
+              </div>`;
+          }
+        },
+        grid: { left: 8, right: 8, top: 20, bottom: 30, containLabel: true },
+        xAxis: {
+          type: 'category',
+          data: filtered.map(d=>d.x),
+          axisLine:{lineStyle:{color:'#5d6ea3'}},
+          axisLabel:{color:'#cbd6f1'}
+        },
+        yAxis: [
+          {
+            type: 'value', name: 'شدة المحور', min: 0, max: 100, position:'right',
+            splitLine:{lineStyle:{color:'#243055'}},
+            axisLine:{lineStyle:{color:'#5d6ea3'}},
+            axisLabel:{color:'#cbd6f1'}
+          },
+          {
+            type: 'value', name: 'نبرة الخطاب', min: 0, max: 100, position:'left',
+            splitLine:{show:false},
+            axisLine:{lineStyle:{color:'#5d6ea3'}},
+            axisLabel:{color:'#cbd6f1'}
+          }
+        ],
+        series: [
+          {
+            name:'شدة المحور',
+            type:'line',
+            smooth: true,
+            symbol:'circle',
+            symbolSize:10,
+            lineStyle:{width:3},
+            areaStyle:{opacity:0.08},
+            data: filtered.map(d=>[d.x, d.y]),
+            z: 3
+          },
+          {
+            name:'نبرة الخطاب',
+            type:'bar',
+            yAxisIndex:1,
+            barWidth: '50%',
+            data: filtered.map(d=>[d.x, d.tone]),
+            z: 1
+          }
+        ],
+        visualMap: [
+          {
+            show:false,
+            type:'continuous',
+            min:0,max:100,
+            seriesIndex:0,
+            inRange:{color:['#6be6c155','#6be6c1']}
+          },
+          {
+            show:false,
+            type:'continuous',
+            min:0,max:100,
+            seriesIndex:1,
+            inRange:{color:['#4da3ff66','#4da3ffcc']}
+          }
+        ]
+      };
+      chart.setOption(option);
+    }
+
+    render();
+    window.addEventListener('resize', ()=>chart.resize());
+  </script>
+</body>
+</html>
