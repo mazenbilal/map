@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {margin:0; padding:0;}
+    #chart {width:100%; height:100vh;}
+  </style>
+</head>
+<body>
+  <div id="chart"></div>
+  <script>
+    var data = [{
+      type: "scatterpolar",
+      r: [4, 5, 4, 5, 3, 4],
+      theta: [
+        "العدالة الاجتماعية",
+        "الصراع الديمقراطي",
+        "التعددية",
+        "الانتقال السياسي (2254)",
+        "الموقف من الخارج",
+        "المراجعة النقدية"
+      ],
+      fill: "toself",
+      name: "حزب الإرادة الشعبية"
+    }];
+
+    var layout = {
+      autosize: true,
+      polar: { radialaxis: {visible: true, range: [0, 5]} },
+      showlegend: false,
+      title: {
+        text: "خطاب حزب الإرادة الشعبية بعد سقوط البعث",
+        font: {size: 16}
+      },
+      margin: {t:40, b:40, l:40, r:40}
+    };
+
+    Plotly.newPlot("chart", data, layout, {responsive:true});
+  </script>
+</body>
+</html>
