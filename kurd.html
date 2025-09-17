@@ -1,25 +1,94 @@
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "المعارضة الكردية في سوريا ما بعد الأسد: خطاب قسد والمجلس الوطني وتحولات السيادة",
-  "description": "مقال تحليلي معمق حول خطاب الأحزاب الكردية في سوريا بعد سقوط الأسد وصعود حكومة أحمد الشرع، وفق قراءة بلغة شانتال موف.",
-  "author": {
-    "@type": "Person",
-    "name": "سوريا الغد"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "سوريا الغد",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://yourwebsite.com/logo.png"
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>خريطة تفاعلية: الأحزاب الكردية وعلاقاتها السياسية</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
     }
-  },
-  "datePublished": "2025-09-17",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://yourwebsite.com/kurdish-opposition-discourse"
-  }
-}
-</script>
+    #kurdish-parties-network {
+      width: 100%;
+      height: 600px;
+      margin: auto;
+    }
+    .legend {
+      font-size: 14px;
+      margin-top: 15px;
+      line-height: 1.8;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <h2>خريطة تفاعلية: الأحزاب الكردية وعلاقاتها السياسية</h2>
+  <div id="kurdish-parties-network"></div>
+
+  <!-- مفتاح الألوان -->
+  <div class="legend">
+    <strong>مفتاح الألوان:</strong><br>
+    <span style="color:#1f77b4;">■</span> أحزاب رئيسية (قسد / PYD، المجلس الوطني)<br>
+    <span style="color:#2ca02c;">■</span> تحالفات (أحزاب الوحدة الوطنية، الأحزاب الأصغر)<br>
+    <span style="color:#d62728;">■</span> السلطة الجديدة في دمشق<br>
+    <span style="color:#9467bd;">■</span> قوى دولية/إقليمية (تركيا، الولايات المتحدة، أوروبا)
+  </div>
+
+  <script>
+    var nodes = [
+      {id: "قسد / PYD", group: "أحزاب رئيسية"},
+      {id: "المجلس الوطني الكردي", group: "أحزاب رئيسية"},
+      {id: "أحزاب الوحدة الوطنية", group: "تحالفات"},
+      {id: "أحزاب أصغر / مستقلون", group: "تحالفات"},
+      {id: "السلطة الجديدة (دمشق)", group: "سلطة"},
+      {id: "تركيا", group: "إقليمي"},
+      {id: "الولايات المتحدة", group: "دولي"},
+      {id: "أوروبا", group: "دولي"}
+    ];
+
+    var edges = [
+      ["قسد / PYD", "السلطة الجديدة (دمشق)"],
+      ["المجلس الوطني الكردي", "السلطة الجديدة (دمشق)"],
+      ["أحزاب الوحدة الوطنية", "السلطة الجديدة (دمشق)"],
+      ["أحزاب أصغر / مستقلون", "السلطة الجديدة (دمشق)"],
+      ["المجلس الوطني الكردي", "قسد / PYD"],
+      ["أحزاب الوحدة الوطنية", "قسد / PYD"],
+      ["قسد / PYD", "الولايات المتحدة"],
+      ["المجلس الوطني الكردي", "تركيا"],
+      ["السلطة الجديدة (دمشق)", "تركيا"],
+      ["السلطة الجديدة (دمشق)", "أوروبا"]
+    ];
+
+    var data = [{
+      type: 'sankey',
+      orientation: 'h',
+      node: {
+        pad: 15,
+        thickness: 20,
+        line: { color: "black", width: 0.5 },
+        label: nodes.map(n => n.id),
+        color: nodes.map(n => n.group === "سلطة" ? "#d62728" :
+                               n.group === "أحزاب رئيسية" ? "#1f77b4" :
+                               n.group === "تحالفات" ? "#2ca02c" :
+                               "#9467bd")
+      },
+      link: {
+        source: edges.map(e => nodes.findIndex(n => n.id === e[0])),
+        target: edges.map(e => nodes.findIndex(n => n.id === e[1])),
+        value: edges.map(e => 1)
+      }
+    }];
+
+    var layout = {
+      font: { size: 14 },
+      autosize: true
+    };
+
+    Plotly.newPlot('kurdish-parties-network', data, layout, {responsive: true});
+  </script>
+</body>
+</html>
