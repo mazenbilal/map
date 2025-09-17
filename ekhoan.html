@@ -1,0 +1,69 @@
+<div id="ikhwanPosition" style="max-width:800px; margin:auto;"></div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var data = [
+    {
+      type: 'scatterpolar',
+      r: [80, 75, 85, 70, 50, 80], // الخطاب المعلن
+      theta: [
+        'الدستور (رمزي)',
+        'القضية الكردية (براغماتي)',
+        'فلسطين/إسرائيل (معارض تقليدي)',
+        'السلطة الجديدة (براغماتي داعم)',
+        'المجازر والمقاتلون الأجانب (غياب الموقف)',
+        'الدستور (رمزي)'
+      ],
+      fill: 'toself',
+      name: 'الخطاب المعلن',
+      fillcolor: 'rgba(52, 152, 219, 0.3)',
+      line: {color: '#2980b9'}
+    },
+    {
+      type: 'scatterpolar',
+      r: [60, 50, 65, 55, 30, 60], // الممارسة الفعلية
+      theta: [
+        'الدستور (رمزي)',
+        'القضية الكردية (براغماتي)',
+        'فلسطين/إسرائيل (معارض تقليدي)',
+        'السلطة الجديدة (براغماتي داعم)',
+        'المجازر والمقاتلون الأجانب (غياب الموقف)',
+        'الدستور (رمزي)'
+      ],
+      fill: 'toself',
+      name: 'الممارسة الفعلية',
+      fillcolor: 'rgba(231, 76, 60, 0.3)',
+      line: {color: '#c0392b'}
+    }
+  ];
+
+  var layout = {
+    title: {
+      text: 'الإخوان المسلمون في سورية بعد 8 كانون الأول 2024: الخطاب مقابل الممارسة',
+      font: {size: 18, family: 'Tahoma'}
+    },
+    polar: {
+      radialaxis: {
+        visible: true,
+        range: [0, 100],
+        tickfont: {size: 14, family: 'Tahoma'}
+      },
+      angularaxis: {
+        tickfont: {size: 14, family: 'Tahoma'}
+      }
+    },
+    showlegend: true,
+    legend: {
+      font: {size: 13, family: 'Tahoma'},
+      orientation: 'h',
+      x: 0.5,
+      xanchor: 'center',
+      y: -0.2
+    }
+  };
+
+  Plotly.newPlot('ikhwanPosition', data, layout, {responsive: true});
+});
+</script>
