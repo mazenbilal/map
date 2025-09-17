@@ -1,109 +1,68 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>خريطة تفاعلية: الأحزاب الكردية وعلاقاتها</title>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 15px;
-      background: #fff;
-    }
-    #network {
-      width: 100%;
-      height: 650px;
-    }
-    .legend {
-      font-size: 14px;
-      margin-top: 10px;
-      line-height: 1.8;
-      text-align: right;
-    }
-  </style>
-</head>
-<body>
-  <h2 style="text-align:center;">خريطة تفاعلية: الأحزاب الكردية وعلاقاتها</h2>
-  <div id="network"></div>
+<!-- تحميل مكتبة Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <div class="legend">
-    <strong>مفتاح الألوان:</strong><br>
-    <span style="color:#1f77b4;">●</span> أحزاب رئيسية (قسد / PYD، المجلس الوطني)<br>
-    <span style="color:#2ca02c;">●</span> تحالفات (أحزاب الوحدة الوطنية، الأحزاب الأصغر)<br>
-    <span style="color:#d62728;">●</span> السلطة الجديدة في دمشق<br>
-    <span style="color:#9467bd;">●</span> قوى دولية/إقليمية (تركيا، الولايات المتحدة، أوروبا)
-  </div>
+<div style="width:100%; max-width:700px; margin:auto;">
+  <canvas id="kurdRadar"></canvas>
+</div>
 
-  <script>
-    // العقد (Nodes)
-    var nodes = [
-      {id: 0, label: "قسد / PYD", color:"#1f77b4"},
-      {id: 1, label: "المجلس الوطني الكردي", color:"#1f77b4"},
-      {id: 2, label: "أحزاب الوحدة الوطنية", color:"#2ca02c"},
-      {id: 3, label: "أحزاب أصغر / مستقلون", color:"#2ca02c"},
-      {id: 4, label: "السلطة الجديدة (دمشق)", color:"#d62728"},
-      {id: 5, label: "تركيا", color:"#9467bd"},
-      {id: 6, label: "الولايات المتحدة", color:"#9467bd"},
-      {id: 7, label: "أوروبا", color:"#9467bd"}
-    ];
+<script>
+const ctx = document.getElementById('kurdRadar');
 
-    // الروابط (Edges)
-    var edges = [
-      [0,4],[1,4],[2,4],[3,4], // علاقة الأحزاب مع دمشق
-      [1,0],[2,0],             // خلافات/تنسيق كردي داخلي
-      [0,6],[1,5],[4,5],[4,7]  // علاقات إقليمية ودولية
-    ];
-
-    // إحداثيات مبدئية (دائرية)
-    var N = nodes.length;
-    var angleStep = 2 * Math.PI / N;
-    nodes.forEach((node, i) => {
-      node.x = Math.cos(i * angleStep);
-      node.y = Math.sin(i * angleStep);
-    });
-
-    // بيانات الروابط
-    var edge_x = [], edge_y = [];
-    edges.forEach(e => {
-      edge_x.push(nodes[e[0]].x, nodes[e[1]].x, null);
-      edge_y.push(nodes[e[0]].y, nodes[e[1]].y, null);
-    });
-
-    var edge_trace = {
-      x: edge_x, y: edge_y,
-      mode: 'lines',
-      line: {width: 1.5, color: '#888'},
-      type: 'scatter',
-      hoverinfo: 'none'
-    };
-
-    // بيانات العقد
-    var node_trace = {
-      x: nodes.map(n => n.x),
-      y: nodes.map(n => n.y),
-      text: nodes.map(n => n.label),
-      mode: 'markers+text',
-      textposition: "bottom center",
-      marker: {
-        size: 25,
-        color: nodes.map(n => n.color),
-        line: {width: 2, color: '#fff'}
+new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: [
+      'العلاقة مع دمشق',
+      'العلاقة مع تركيا',
+      'الدعم الدولي',
+      'وحدة الصف الداخلي',
+      'المطالب الدستورية'
+    ],
+    datasets: [
+      {
+        label: 'قسد / PYD',
+        data: [4, 1, 4, 3, 4], // قيم تقريبية 1-5
+        fill: true,
+        backgroundColor: 'rgba(31,119,180,0.2)',
+        borderColor: 'rgba(31,119,180,1)',
+        pointBackgroundColor: 'rgba(31,119,180,1)'
       },
-      type: 'scatter',
-      hoverinfo: 'text'
-    };
-
-    var data = [edge_trace, node_trace];
-
-    var layout = {
-      hovermode: 'closest',
-      margin: {t:20,l:20,r:20,b:20},
-      xaxis: {showgrid: false, zeroline: false, showticklabels: false},
-      yaxis: {showgrid: false, zeroline: false, showticklabels: false}
-    };
-
-    Plotly.newPlot('network', data, layout, {responsive: true});
-  </script>
-</body>
-</html>
+      {
+        label: 'المجلس الوطني الكردي',
+        data: [3, 4, 2, 3, 4],
+        fill: true,
+        backgroundColor: 'rgba(44,160,44,0.2)',
+        borderColor: 'rgba(44,160,44,1)',
+        pointBackgroundColor: 'rgba(44,160,44,1)'
+      },
+      {
+        label: 'أحزاب الوحدة الوطنية',
+        data: [3, 2, 2, 4, 3],
+        fill: true,
+        backgroundColor: 'rgba(214,39,40,0.2)',
+        borderColor: 'rgba(214,39,40,1)',
+        pointBackgroundColor: 'rgba(214,39,40,1)'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: { display: true },
+        suggestedMin: 0,
+        suggestedMax: 5,
+        ticks: { stepSize: 1 }
+      }
+    },
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 14 } } },
+      title: {
+        display: true,
+        text: 'رادار تفاعلي: الأحزاب الكردية وموقعها في المشهد السوري',
+        font: { size: 16 }
+      }
+    }
+  }
+});
+</script>
