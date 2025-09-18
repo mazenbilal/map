@@ -1,0 +1,89 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { ChevronDown, ChevronUp } from "lucide-react";
+
+const timelineData = [
+  {
+    date: "كانون الثاني 2025",
+    negotiation: "بداية اتصالات غير مباشرة عبر واشنطن وعمّان.",
+    violation: "غارات جوية إسرائيلية على ريف دمشق تستهدف مواقع عسكرية.",
+  },
+  {
+    date: "آذار 2025",
+    negotiation: "لقاءات تمهيدية بين وفود سورية وإسرائيلية في عمّان.",
+    violation: "توغلات برية إسرائيلية محدودة في القنيطرة.",
+  },
+  {
+    date: "تموز 2025",
+    negotiation: "تعثر المفاوضات بسبب تصاعد التوترات في الجنوب السوري.",
+    violation: "قصف مكثف في السويداء ودرعا يوقع خسائر بشرية.",
+  },
+  {
+    date: "أيلول 2025",
+    negotiation: "تقديم مقترح إسرائيلي مفصل لمناطق عازلة، ورد سوري بتحفظات.",
+    violation: "اغتيال قيادي محلي في الجنوب عبر ضربة مسيّرة.",
+  },
+  {
+    date: "كانون الأول 2025 (متوقع)",
+    negotiation: "إمكانية توقيع تفاهمات أمنية بإشراف أممي وبرعاية أمريكية.",
+    violation: "مخاوف من استمرار الغارات حتى توقيع الاتفاق.",
+  },
+];
+
+export default function SyriaIsraelComparisonTimeline() {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  return (
+    <div className="w-full max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold text-center mb-6">
+        مسار المفاوضات مقابل الانتهاكات الإسرائيلية (2025)
+      </h2>
+      <div className="space-y-4">
+        {timelineData.map((item, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+          >
+            <Card
+              className="cursor-pointer shadow-lg rounded-2xl hover:shadow-xl transition"
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
+            >
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start gap-6 flex-col md:flex-row">
+                  {/* المفاوضات */}
+                  <div className="md:w-1/2 border-r-2 border-green-500 pr-4 rtl:pr-0 rtl:pl-4">
+                    <h3 className="text-lg font-semibold text-green-700">المفاوضات</h3>
+                    <p className="text-sm text-gray-500">{item.date}</p>
+                    {openIndex === index && (
+                      <p className="mt-2 text-gray-700 leading-relaxed">
+                        {item.negotiation}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* الانتهاكات */}
+                  <div className="md:w-1/2 border-l-2 border-red-500 pl-4 rtl:pl-0 rtl:pr-4">
+                    <h3 className="text-lg font-semibold text-red-700">الانتهاكات</h3>
+                    <p className="text-sm text-gray-500">{item.date}</p>
+                    {openIndex === index && (
+                      <p className="mt-2 text-gray-700 leading-relaxed">
+                        {item.violation}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-3">
+                  {openIndex === index ? <ChevronUp /> : <ChevronDown />}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
