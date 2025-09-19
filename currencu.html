@@ -1,84 +1,64 @@
-import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, AreaChart, Area } from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مخاطر إصدار النيو ليرة السورية</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+  </style>
+</head>
+<body>
+  <h2>مخاطر إصدار "النيو ليرة" السورية</h2>
+  <p>تأثيرات محتملة على سعر الصرف، التضخم، الاحتياطيات، والواردات</p>
 
-export default function CurrencyCrisisChart() {
-  const [tab, setTab] = useState("exchange");
+  <canvas id="exchangeChart"></canvas>
+  <canvas id="inflationChart"></canvas>
+  <canvas id="reservesChart"></canvas>
+  <canvas id="importsChart"></canvas>
 
-  const data = [
-    { month: "1/2023", exchange: 6000, inflation: 80, reserves: 1500, imports: 2000 },
-    { month: "4/2023", exchange: 7000, inflation: 95, reserves: 1200, imports: 2100 },
-    { month: "7/2023", exchange: 8500, inflation: 110, reserves: 1000, imports: 2300 },
-    { month: "10/2023", exchange: 10000, inflation: 125, reserves: 800, imports: 2400 },
-    { month: "1/2024", exchange: 11500, inflation: 140, reserves: 600, imports: 2600 },
-    { month: "4/2024", exchange: 13000, inflation: 160, reserves: 500, imports: 2700 },
-    { month: "7/2024", exchange: 14500, inflation: 180, reserves: 400, imports: 2800 },
-    { month: "10/2024", exchange: 16000, inflation: 200, reserves: 300, imports: 2900 },
-    { month: "1/2025", exchange: 17500, inflation: 220, reserves: 200, imports: 3000 },
-  ];
+  <script>
+    const labels = ["1/2023","4/2023","7/2023","10/2023","1/2024","4/2024","7/2024","10/2024","1/2025"];
+    const data = {
+      exchange: [6000,7000,8500,10000,11500,13000,14500,16000,17500],
+      inflation: [80,95,110,125,140,160,180,200,220],
+      reserves: [1500,1200,1000,800,600,500,400,300,200],
+      imports: [2000,2100,2300,2400,2600,2700,2800,2900,3000]
+    };
 
-  return (
-    <Card className="p-4 shadow-xl rounded-2xl">
-      <CardContent>
-        <h2 className="text-xl font-bold mb-4 text-center">مخاطر إصدار "النيو ليرة" السورية</h2>
-        <Tabs value={tab} onValueChange={setTab} className="w-full">
-          <TabsList className="grid grid-cols-4 gap-2 mb-4">
-            <TabsTrigger value="exchange">سعر الصرف</TabsTrigger>
-            <TabsTrigger value="inflation">التضخم</TabsTrigger>
-            <TabsTrigger value="reserves">الاحتياطيات</TabsTrigger>
-            <TabsTrigger value="imports">الواردات</TabsTrigger>
-          </TabsList>
+    function renderChart(ctxId, label, dataset, color) {
+      new Chart(document.getElementById(ctxId), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: dataset,
+            borderColor: color,
+            backgroundColor: color + '55',
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom' } },
+          scales: { y: { beginAtZero: false } }
+        }
+      });
+    }
 
-          <TabsContent value="exchange">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="exchange" stroke="#ff0000" strokeWidth={3} name="سعر الصرف (ليرة/دولار)" />
-              </LineChart>
-            </ResponsiveContainer>
-          </TabsContent>
-
-          <TabsContent value="inflation">
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={data}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Area type="monotone" dataKey="inflation" stroke="#ff7f0e" fill="#ff7f0e40" name="مؤشر التضخم" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </TabsContent>
-
-          <TabsContent value="reserves">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="reserves" stroke="#1f77b4" strokeWidth={3} name="الاحتياطيات (مليون $)" />
-              </LineChart>
-            </ResponsiveContainer>
-          </TabsContent>
-
-          <TabsContent value="imports">
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={data}>
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="imports" stroke="#2ca02c" strokeWidth={3} name="الواردات (مليون $)" />
-              </LineChart>
-            </ResponsiveContainer>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
-  );
-}
+    renderChart("exchangeChart", "سعر الصرف (ليرة/دولار)", data.exchange, "red");
+    renderChart("inflationChart", "مؤشر التضخم", data.inflation, "orange");
+    renderChart("reservesChart", "الاحتياطيات (مليون $)", data.reserves, "blue");
+    renderChart("importsChart", "الواردات (مليون $)", data.imports, "green");
+  </script>
+</body>
+</html>
