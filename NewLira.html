@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأزمة النقدية السورية</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; direction: rtl; text-align: center; padding: 10px; background: #f9f9f9; }
+    .chart-container { margin: 20px auto; max-width: 100%; height: 300px; }
+    canvas { width: 100% !important; height: auto !important; }
+  </style>
+</head>
+<body>
+  <h2>الأزمة النقدية السورية: مؤشرات متعددة</h2>
+
+  <!-- الرسم الأول: سعر الصرف -->
+  <div class="chart-container">
+    <canvas id="exchangeChart"></canvas>
+  </div>
+
+  <!-- الرسم الثاني: التضخم -->
+  <div class="chart-container">
+    <canvas id="inflationChart"></canvas>
+  </div>
+
+  <!-- الرسم الثالث: الواردات والثقة -->
+  <div class="chart-container">
+    <canvas id="importsTrustChart"></canvas>
+  </div>
+
+  <script>
+    const labels = ["1/2023","4/2023","7/2023","10/2023","1/2024","4/2024","7/2024","10/2024","1/2025"];
+
+    // سعر الصرف
+    new Chart(document.getElementById('exchangeChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "سعر الصرف (ل.س/دولار)",
+          data: [6000,7000,8500,10000,11500,13000,14500,16000,17500],
+          borderColor: "#ff0000",
+          backgroundColor: "rgba(255,0,0,0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { title: { display: true, text: 'الليرة/دولار' } } }
+      }
+    });
+
+    // التضخم
+    new Chart(document.getElementById('inflationChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "معدل التضخم (%)",
+          data: [120,135,150,165,180,200,225,250,280],
+          borderColor: "#ff9900",
+          backgroundColor: "rgba(255,153,0,0.2)",
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { title: { display: true, text: 'التضخم (%)' } } }
+      }
+    });
+
+    // الواردات والثقة
+    new Chart(document.getElementById('importsTrustChart'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "فاتورة الاستيراد (مليار $)",
+            data: [2.5,3.0,3.6,4.2,4.8,5.2,5.6,6.0,6.5],
+            borderColor: "#0066cc",
+            backgroundColor: "rgba(0,102,204,0.2)",
+            fill: true,
+            tension: 0.3
+          },
+          {
+            label: "مؤشر الثقة (100=عالية)",
+            data: [70,65,55,50,45,40,35,30,25],
+            borderColor: "#009933",
+            backgroundColor: "rgba(0,153,51,0.2)",
+            fill: true,
+            tension: 0.3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { title: { display: true, text: 'الواردات / الثقة' } } }
+      }
+    });
+  </script>
+</body>
+</html>
