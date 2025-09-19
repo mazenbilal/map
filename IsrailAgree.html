@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>مخطط تدفق: الخطة الإسرائيلية وأبعادها الإقليمية</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { font-family: "Arial", sans-serif; direction: rtl; text-align: center; background: #fafafa; }
+    #chartContainer { width: 100%; max-width: 800px; margin: 40px auto; }
+  </style>
+</head>
+<body>
+  <h2>مخطط تدفق: الخطة الإسرائيلية وأبعادها الإقليمية</h2>
+  <p style="color: gray;">شبكة أمنية متعددة المستويات</p>
+  <div id="chartContainer">
+    <canvas id="flowChart"></canvas>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('flowChart').getContext('2d');
+
+    const data = {
+      labels: ["إسرائيل", "الخطة الأمنية (3 مستويات)", "الجنوب السوري", "خطوط إمداد إيران", "حزب الله", "الأمن الإسرائيلي"],
+      datasets: [{
+        data: [10, 8, 6, 4, 3, 9],
+        backgroundColor: ["#ff6666","#66b3ff","#99ff99","#ffcc99","#c2c2f0","#ffd700"]
+      }]
+    };
+
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const labels = [
+                  "المركز: إسرائيل (صانعة القرار)",
+                  "المستويات الأمنية الثلاثة",
+                  "الميدان: الجنوب السوري",
+                  "الامتداد الإيراني عبر سوريا",
+                  "ترابط مع حزب الله",
+                  "الهدف النهائي: الأمن الإسرائيلي"
+                ];
+                return labels[context.dataIndex];
+              }
+            }
+          }
+        },
+        scales: {
+          x: { display: false }
+        }
+      }
+    };
+
+    new Chart(ctx, config);
+  </script>
+</body>
+</html>
