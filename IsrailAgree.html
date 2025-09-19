@@ -2,11 +2,39 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مخطط تدفق: الخطة الإسرائيلية وأبعادها الإقليمية</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: "Arial", sans-serif; direction: rtl; text-align: center; background: #fafafa; }
-    #chartContainer { width: 100%; max-width: 800px; margin: 40px auto; }
+    body { 
+      font-family: "Arial", sans-serif; 
+      direction: rtl; 
+      text-align: center; 
+      background: #fafafa; 
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #chartContainer { 
+      width: 100%; 
+      max-width: 800px; 
+      margin: 20px auto;
+      position: relative;
+      height: 60vh;
+    }
+    canvas {
+      max-width: 100%;
+      height: auto !important;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      #chartContainer {
+        height: 50vh;
+        margin: 15px auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -17,46 +45,72 @@
   </div>
 
   <script>
-    const ctx = document.getElementById('flowChart').getContext('2d');
+    // ننتظر تحميل الصفحة بالكامل قبل تنفيذ البرنامج النصي
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('flowChart').getContext('2d');
+      
+      // إعدادات التكيف مع الشاشات المختلفة
+      Chart.defaults.font.size = window.innerWidth < 600 ? 12 : 14;
+      
+      const data = {
+        labels: ["إسرائيل", "الخطة الأمنية (3 مستويات)", "الجنوب السوري", "خطوط إمداد إيران", "حزب الله", "الأمن الإسرائيلي"],
+        datasets: [{
+          data: [10, 8, 6, 4, 3, 9],
+          backgroundColor: ["#ff6666","#66b3ff","#99ff99","#ffcc99","#c2c2f0","#ffd700"],
+          barThickness: window.innerWidth < 600 ? 'flex' : 30,
+          maxBarThickness: 40,
+          minBarLength: 2
+        }]
+      };
 
-    const data = {
-      labels: ["إسرائيل", "الخطة الأمنية (3 مستويات)", "الجنوب السوري", "خطوط إمداد إيران", "حزب الله", "الأمن الإسرائيلي"],
-      datasets: [{
-        data: [10, 8, 6, 4, 3, 9],
-        backgroundColor: ["#ff6666","#66b3ff","#99ff99","#ffcc99","#c2c2f0","#ffd700"]
-      }]
-    };
-
-    const config = {
-      type: 'bar',
-      data: data,
-      options: {
-        indexAxis: 'y',
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const labels = [
-                  "المركز: إسرائيل (صانعة القرار)",
-                  "المستويات الأمنية الثلاثة",
-                  "الميدان: الجنوب السوري",
-                  "الامتداد الإيراني عبر سوريا",
-                  "ترابط مع حزب الله",
-                  "الهدف النهائي: الأمن الإسرائيلي"
-                ];
-                return labels[context.dataIndex];
+      const config = {
+        type: 'bar',
+        data: data,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: 'y',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const labels = [
+                    "المركز: إسرائيل (صانعة القرار)",
+                    "المستويات الأمنية الثلاثة",
+                    "الميدان: الجنوب السوري",
+                    "الامتداد الإيراني عبر سوريا",
+                    "ترابط مع حزب الله",
+                    "الهدف النهائي: الأمن الإسرائيلي"
+                  ];
+                  return labels[context.dataIndex];
+                }
+              }
+            }
+          },
+          scales: {
+            x: { 
+              display: false,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              grid: {
+                display: false
               }
             }
           }
-        },
-        scales: {
-          x: { display: false }
         }
-      }
-    };
+      };
 
-    new Chart(ctx, config);
+      const myChart = new Chart(ctx, config);
+      
+      // إعادة رسم المخطط عند تغيير حجم النافذة للتكيف مع الشاشات المختلفة
+      window.addEventListener('resize', function() {
+        myChart.update();
+      });
+    });
   </script>
 </body>
 </html>
