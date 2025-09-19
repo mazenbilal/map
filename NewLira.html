@@ -6,9 +6,31 @@
   <title>الأزمة النقدية السورية</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; direction: rtl; text-align: center; padding: 10px; background: #f9f9f9; }
-    .chart-container { margin: 20px auto; max-width: 100%; height: 300px; }
-    canvas { width: 100% !important; height: auto !important; }
+    body {
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      text-align: center;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    h2 {
+      margin-top: 20px;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      height: 350px; /* حجم ثابت لكل رسم */
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
   </style>
 </head>
 <body>
@@ -48,6 +70,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { position: 'bottom' } },
         scales: { y: { title: { display: true, text: 'الليرة/دولار' } } }
       }
@@ -69,6 +92,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { position: 'bottom' } },
         scales: { y: { title: { display: true, text: 'التضخم (%)' } } }
       }
@@ -100,6 +124,7 @@
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { position: 'bottom' } },
         scales: { y: { title: { display: true, text: 'الواردات / الثقة' } } }
       }
