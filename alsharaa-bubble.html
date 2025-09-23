@@ -9,7 +9,7 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background: #fff;
-      direction: rtl; /* نص عربي */
+      direction: rtl;
       text-align: center;
     }
     #bubbleChart {
@@ -29,10 +29,9 @@
 
   <h2>إنفوغراف تفاعلي: فقاعات تحليلية لخطاب أحمد الشرع في قمة كونكورديا 2025</h2>
   <div class="chart-intro">
-    هذا الإنفوغراف يقدّم ملخصًا نقديًا لخطاب أحمد الشرع عبر فقاعات ملونة.
-    <br>كل فقاعة تمثل محورًا رئيسيًا من الخطاب:
-    - حجم الفقاعة = قوة الطرح،
-    - اللون = طبيعة الخطاب،
+    هذا الإنفوغراف يقدّم ملخصًا نقديًا لخطاب أحمد الشرع عبر فقاعات ملونة.<br>
+    - حجم الفقاعة = قوة الطرح،<br>
+    - اللون = طبيعة الخطاب،<br>
     - عند تمرير الفأرة يظهر التفسير النقدي الكامل.
   </div>
 
@@ -54,6 +53,15 @@
     ];
 
     var colors = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#17becf'];
+    var colorNames = [
+      "أزرق = خطاب دفاعي",
+      "برتقالي = تبسيطي",
+      "أخضر = مثالي",
+      "أحمر = هش",
+      "بنفسجي = إقصائي",
+      "بني = مؤجل",
+      "سماوي = فرداني"
+    ];
 
     var trace = {
       x: [1,2,3,4,5,6,7],
@@ -69,21 +77,30 @@
         line: {width: 2, color: '#333'}
       },
       hovertemplate: "<b>%{hovertext}</b><br>التقييم: %{y}/5<extra></extra>",
-      name: "تحليل نقدي"
+      name: ""
+    };
+
+    // إنشاء Trace إضافي للمفتاح
+    var legendTrace = {
+      x: Array(colors.length).fill(0),
+      y: Array(colors.length).fill(0),
+      mode: 'markers',
+      marker: { size: 15, color: colors },
+      name: "",
+      text: colorNames,
+      hoverinfo: "text",
+      showlegend: true
     };
 
     var layout = {
-      title: {
-        text: "",
-        font: {size: 18}
-      },
       xaxis: {visible: false},
       yaxis: {range: [0,5.5], title: "مستوى القوة الخطابية (1-5)"},
       margin: {l: 50, r: 30, t: 30, b: 50},
-      showlegend: false
+      showlegend: true,
+      legend: {orientation: "h", y: -0.2, x: 0.5, xanchor: "center"}
     };
 
-    Plotly.newPlot('bubbleChart', [trace], layout, {responsive: true});
+    Plotly.newPlot('bubbleChart', [trace, legendTrace], layout, {responsive: true});
   </script>
 
 </body>
