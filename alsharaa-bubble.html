@@ -14,7 +14,7 @@
     }
     #bubbleChart {
       width: 100%;
-      height: 70vh; /* مناسب للموبايل */
+      height: 70vh;
     }
     .chart-intro {
       max-width: 800px;
@@ -32,7 +32,7 @@
     استكشف خطاب أحمد الشرع عبر هذا الإنفوغراف التفاعلي:<br>
     - كل فقاعة تمثل محورًا رئيسيًا.<br>
     - حجم الفقاعة = قوة الطرح.<br>
-    - اللون = طبيعة الخطاب.<br>
+    - اللون = طبيعة الخطاب (انظر مفتاح الألوان أدناه).<br>
     - اضغط أو مرر فوق الفقاعة لقراءة التحليل الكامل.
   </div>
 
@@ -64,17 +64,20 @@
       "سماوي = فرداني"
     ];
 
+    // توزيع الفقاعات على المحور X بمسافات واسعة
+    var x_positions = [1, 3, 5, 7, 9, 11, 13];
+
     var trace = {
-      x: [1,2,3,4,5,6,7],
+      x: x_positions,
       y: values,
       text: labels,
       hovertext: comments,
       mode: 'markers+text',
       textposition: 'top center',
       marker: {
-        size: values.map(v => v*15), // فقاعات أصغر للموبايل
+        size: values.map(v => v*13), // تصغير للهواتف
         color: colors,
-        opacity: 0.8,
+        opacity: 0.85,
         line: {width: 2, color: '#333'}
       },
       hovertemplate: "<b>%{text}</b><br>%{hovertext}<br>التقييم: %{y}/5<extra></extra>",
@@ -84,16 +87,17 @@
     var layout = {
       xaxis: {visible: false},
       yaxis: {range: [0,5.5], title: "مستوى القوة الخطابية (1-5)"},
-      margin: {l: 50, r: 30, t: 30, b: 50},
+      margin: {l: 50, r: 30, t: 30, b: 80},
       showlegend: true,
-      legend: {orientation: "h", y: -0.3, x: 0.5, xanchor: "center"},
+      legend: {orientation: "h", y: -0.4, x: 0.5, xanchor: "center"}
     };
 
+    // مفتاح الألوان كـ Legend
     var legendTrace = {
       x: Array(colors.length).fill(0),
       y: Array(colors.length).fill(0),
       mode: 'markers',
-      marker: { size: 12, color: colors },
+      marker: { size: 15, color: colors },
       name: "",
       text: colorNames,
       hoverinfo: "text",
@@ -102,10 +106,10 @@
 
     var config = {
       responsive: true,
-      scrollZoom: true,       // تكبير/تصغير بالإصبع
-      displayModeBar: true,   // إظهار شريط الأدوات
-      displaylogo: false,     // إخفاء شعار Plotly
-      modeBarButtonsToRemove: ['select2d','lasso2d','resetScale2d'] // أدوات أقل
+      scrollZoom: true,
+      displayModeBar: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ['select2d','lasso2d','resetScale2d']
     };
 
     Plotly.newPlot('bubbleChart', [trace, legendTrace], layout, config);
