@@ -1,24 +1,90 @@
-<style>
-.responsive-iframe {
-  position: relative;
-  padding-bottom: 65%; /* النسبة تحدد الارتفاع */
-  height: 0;
-  overflow: hidden;
-  max-width: 100%;
-  border: none;
-}
-.responsive-iframe iframe {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-</style>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إنفوغراف خطاب الشرع - فقاعات</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      direction: rtl; /* نص عربي */
+      text-align: center;
+    }
+    #bubbleChart {
+      width: 100%;
+      height: 100vh;
+    }
+    .chart-intro {
+      max-width: 800px;
+      margin: 20px auto;
+      font-size: 16px;
+      color: #333;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
 
-<div class="responsive-iframe">
-  <iframe src="https://mazenbilal.github.io/map/alsharaa-bubble.html" 
-          loading="lazy" 
-          title="إنفوغراف تفاعلي: تحليل نقدي لخطاب أحمد الشرع في قمة كونكورديا 2025">
-  </iframe>
-</div>
+  <h2>إنفوغراف تفاعلي: فقاعات تحليلية لخطاب أحمد الشرع في قمة كونكورديا 2025</h2>
+  <div class="chart-intro">
+    هذا الإنفوغراف يقدّم ملخصًا نقديًا لخطاب أحمد الشرع عبر فقاعات ملونة.
+    <br>كل فقاعة تمثل محورًا رئيسيًا من الخطاب:
+    - حجم الفقاعة = قوة الطرح،
+    - اللون = طبيعة الخطاب،
+    - عند تمرير الفأرة يظهر التفسير النقدي الكامل.
+  </div>
+
+  <div id="bubbleChart"></div>
+
+  <script>
+    var labels = ["الحوار", "الحرب", "الوحدة", "الغرب", "الأكراد", "إسرائيل", "الزعامة"];
+
+    var values = [3, 2, 2, 2, 2, 2, 3];
+
+    var comments = [
+      "تبرير الماضي بالحوار، لكنه لا يمحو ذاكرة العنف.",
+      "تبسيط الحرب كخير/شر، يغفل انتهاكات المعارضة.",
+      "طرح مثالي يتجاهل الشرخ الطائفي.",
+      "شراكة معلنة رغم هشاشة الاقتصاد.",
+      "إدماج مشروط يعيد إنتاج المركزية.",
+      "سلام مؤجل بلا رؤية عملية.",
+      "زعامة كاريزمية قد تعيد إنتاج الفردانية."
+    ];
+
+    var colors = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b','#17becf'];
+
+    var trace = {
+      x: [1,2,3,4,5,6,7],
+      y: values,
+      text: labels,
+      hovertext: comments,
+      mode: 'markers+text',
+      textposition: 'top center',
+      marker: {
+        size: values.map(v => v*20),
+        color: colors,
+        opacity: 0.7,
+        line: {width: 2, color: '#333'}
+      },
+      hovertemplate: "<b>%{hovertext}</b><br>التقييم: %{y}/5<extra></extra>",
+      name: "تحليل نقدي"
+    };
+
+    var layout = {
+      title: {
+        text: "",
+        font: {size: 18}
+      },
+      xaxis: {visible: false},
+      yaxis: {range: [0,5.5], title: "مستوى القوة الخطابية (1-5)"},
+      margin: {l: 50, r: 30, t: 30, b: 50},
+      showlegend: false
+    };
+
+    Plotly.newPlot('bubbleChart', [trace], layout, {responsive: true});
+  </script>
+
+</body>
+</html>
