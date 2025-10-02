@@ -5,15 +5,32 @@
   <title>توزيع الضحايا - أيلول 2025</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { max-width: 900px; margin: auto; font-family: sans-serif; }
-    canvas { width: 100% !important; height: 450px !important; }
+    body { 
+      max-width: 900px; 
+      margin: auto; 
+      font-family: sans-serif; 
+      background: #fff;
+      padding: 20px;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 700px;   /* الحد الأقصى لعرض الرسم */
+      margin: auto;
+    }
+    canvas {
+      width: 100% !important;
+      height: 400px !important;  /* تثبيت الارتفاع */
+    }
     figure { text-align: center; }
     figcaption { margin-top: 10px; color: #444; font-size: 14px; }
   </style>
 </head>
 <body>
   <figure>
-    <canvas id="casualtiesChart"></canvas>
+    <div class="chart-container">
+      <canvas id="casualtiesChart"></canvas>
+    </div>
     <figcaption>
       توزيع الضحايا في سوريا خلال أيلول 2025 بحسب الفئات المختلفة
     </figcaption>
@@ -32,3 +49,49 @@
           "مخلفات الحرب",
           "إعدام ميداني",
           "جرائم قتل",
+          "تعذيب في السجون",
+          "الجندرما التركية",
+          "لغم/عبوة ناسفة",
+          "رصاص مجهولين",
+          "على يد قسد"
+        ],
+        datasets: [{
+          label: "عدد الضحايا - أيلول 2025",
+          data: [43, 21, 20, 23, 39, 55, 3, 3, 3, 55, 5],
+          backgroundColor: "rgba(54, 162, 235, 0.6)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,  // يتيح التحكم بالارتفاع
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: "توزيع الضحايا في سوريا - أيلول 2025",
+            font: { size: 18 }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.parsed.y + " ضحية";
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "عدد الضحايا"
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
