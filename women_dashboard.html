@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة النساء في سوريا</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -19,6 +18,7 @@
             padding: 15px;
             line-height: 1.6;
             color: #333;
+            min-height: 100vh;
         }
         
         .container {
@@ -29,7 +29,7 @@
         .card {
             background: white;
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             border: 1px solid #f0f0f0;
@@ -37,14 +37,14 @@
         
         .stat-card {
             text-align: center;
-            padding: 25px 15px;
+            padding: 30px 15px;
         }
         
         .stat-number {
             font-size: 3.5rem;
             font-weight: bold;
             color: #d90429;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         
         .stat-title {
@@ -60,8 +60,71 @@
         
         .chart-container {
             position: relative;
-            height: 300px;
             width: 100%;
+            overflow: hidden;
+        }
+        
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .bar-label {
+            width: 100px;
+            font-size: 0.9rem;
+        }
+        
+        .bar {
+            height: 30px;
+            background: #118ab2;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 10px;
+            color: white;
+            font-weight: bold;
+            min-width: 40px;
+        }
+        
+        .line-chart {
+            position: relative;
+            height: 200px;
+            margin: 30px 0;
+        }
+        
+        .line-point {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff7f0e;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .line-label {
+            position: absolute;
+            font-size: 0.8rem;
+            transform: translateX(-50%);
+            bottom: -25px;
+            text-align: center;
+            width: 70px;
+        }
+        
+        .line-value {
+            position: absolute;
+            font-size: 0.8rem;
+            transform: translateX(-50%);
+            top: -25px;
+            text-align: center;
         }
         
         .note {
@@ -69,7 +132,7 @@
             color: gray;
             text-align: right;
             margin: 20px 0;
-            padding: 10px;
+            padding: 15px;
             background: #f9f9f9;
             border-radius: 5px;
             border-right: 3px solid #d90429;
@@ -86,8 +149,8 @@
                 font-size: 2.8rem;
             }
             
-            .chart-container {
-                height: 250px;
+            .line-chart {
+                height: 180px;
             }
         }
         
@@ -100,12 +163,17 @@
                 font-size: 2.2rem;
             }
             
-            .chart-container {
-                height: 220px;
+            .line-chart {
+                height: 150px;
             }
             
             .card {
-                padding: 10px;
+                padding: 15px;
+            }
+            
+            .bar {
+                height: 25px;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -121,14 +189,18 @@
         <div class="card">
             <h2>📈 التطور الشهري للحالات الموثقة</h2>
             <div class="chart-container">
-                <canvas id="timelineChart"></canvas>
+                <div class="line-chart" id="timelineChart">
+                    <!-- سيتم إنشاء النقاط عبر JavaScript -->
+                </div>
             </div>
         </div>
         
         <div class="card">
             <h2>📍 التوزيع الجغرافي لحالات الاختفاء</h2>
             <div class="chart-container">
-                <canvas id="regionalChart"></canvas>
+                <div class="bar-chart" id="regionalChart">
+                    <!-- سيتم إنشاء الأشرطة عبر JavaScript -->
+                </div>
             </div>
         </div>
         
@@ -137,104 +209,136 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // التأكد من تحميل المكتبة
-            if (typeof Chart === 'undefined') {
-                document.body.innerHTML = '<div style="text-align:center;padding:20px;color:#d90429;">عذراً، حدث خطأ في تحميل المكتبات. يرجى التحقق من اتصال الإنترنت وتحديث الصفحة.</div>';
-                return;
-            }
+        // بيانات المخططات
+        const timelineData = [
+            {month: "ديسمبر 2024", value: 8},
+            {month: "يناير", value: 12},
+            {month: "فبراير", value: 15},
+            {month: "مارس", value: 20},
+            {month: "أبريل", value: 25},
+            {month: "مايو", value: 18},
+            {month: "يونيو", value: 30},
+            {month: "يوليو", value: 26},
+            {month: "أغسطس", value: 22},
+            {month: "سبتمبر", value: 34},
+            {month: "أكتوبر", value: 30}
+        ];
+        
+        const regionalData = [
+            {region: "الغاب", value: 28},
+            {region: "اللاذقية", value: 16},
+            {region: "دمشق", value: 9},
+            {region: "حلب", value: 7},
+            {region: "درعا", value: 4}
+        ];
+        
+        // رسم مخطط الخطوط
+        function drawTimelineChart() {
+            const container = document.getElementById('timelineChart');
+            const maxValue = Math.max(...timelineData.map(item => item.value));
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
             
-            try {
-                // مخطط التطور الشهري
-                const timelineCtx = document.getElementById('timelineChart').getContext('2d');
-                const timelineChart = new Chart(timelineCtx, {
-                    type: 'line',
-                    data: {
-                        labels: ["ديسمبر 2024", "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر"],
-                        datasets: [{
-                            label: 'عدد الحالات',
-                            data: [8, 12, 15, 20, 25, 18, 30, 26, 22, 34, 30],
-                            borderColor: '#ff7f0e',
-                            backgroundColor: 'rgba(255, 127, 14, 0.1)',
-                            borderWidth: 3,
-                            tension: 0.4,
-                            pointBackgroundColor: '#ff7f0e',
-                            pointRadius: 5,
-                            pointHoverRadius: 7
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
+            timelineData.forEach((item, index) => {
+                const x = (index / (timelineData.length - 1)) * (containerWidth - 40) + 20;
+                const y = containerHeight - (item.value / maxValue) * (containerHeight - 40) - 20;
                 
-                // مخطط التوزيع الجغرافي
-                const regionalCtx = document.getElementById('regionalChart').getContext('2d');
-                const regionalChart = new Chart(regionalCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: ["الغاب", "اللاذقية", "دمشق", "حلب", "درعا"],
-                        datasets: [{
-                            label: 'عدد الحالات',
-                            data: [28, 16, 9, 7, 4],
-                            backgroundColor: '#118ab2',
-                            borderColor: '#0a6c8c',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0,0,0,0.05)'
-                                }
-                            },
-                            x: {
-                                grid: {
-                                    display: false
-                                }
-                            }
-                        }
-                    }
-                });
+                // نقطة البيانات
+                const point = document.createElement('div');
+                point.className = 'line-point';
+                point.style.left = x + 'px';
+                point.style.top = y + 'px';
+                container.appendChild(point);
                 
-                // إعادة رسم المخططات عند تغيير حجم النافذة
-                window.addEventListener('resize', function() {
-                    timelineChart.resize();
-                    regionalChart.resize();
-                });
+                // تسمية الشهر
+                const label = document.createElement('div');
+                label.className = 'line-label';
+                label.textContent = item.month;
+                label.style.left = x + 'px';
+                container.appendChild(label);
                 
-            } catch (error) {
-                console.error('خطأ في إنشاء المخططات:', error);
-                document.body.innerHTML = '<div style="text-align:center;padding:20px;color:#d90429;">عذراً، حدث خطأ في تحميل البيانات. يرجى تحديث الصفحة.</div>';
-            }
+                // قيمة البيانات
+                const value = document.createElement('div');
+                value.className = 'line-value';
+                value.textContent = item.value;
+                value.style.left = x + 'px';
+                container.appendChild(value);
+                
+                // رسم الخط بين النقاط
+                if (index > 0) {
+                    const prevX = ((index - 1) / (timelineData.length - 1)) * (containerWidth - 40) + 20;
+                    const prevY = containerHeight - (timelineData[index - 1].value / maxValue) * (containerHeight - 40) - 20;
+                    
+                    const line = document.createElement('div');
+                    line.style.position = 'absolute';
+                    line.style.height = '3px';
+                    line.style.background = '#ff7f0e';
+                    line.style.transformOrigin = '0 0';
+                    
+                    const length = Math.sqrt(Math.pow(x - prevX, 2) + Math.pow(y - prevY, 2));
+                    const angle = Math.atan2(y - prevY, x - prevX) * 180 / Math.PI;
+                    
+                    line.style.width = length + 'px';
+                    line.style.left = prevX + 'px';
+                    line.style.top = prevY + 'px';
+                    line.style.transform = 'rotate(' + angle + 'deg)';
+                    
+                    container.appendChild(line);
+                }
+            });
+        }
+        
+        // رسم مخطط الأعمدة
+        function drawRegionalChart() {
+            const container = document.getElementById('regionalChart');
+            const maxValue = Math.max(...regionalData.map(item => item.value));
+            
+            regionalData.forEach(item => {
+                const barItem = document.createElement('div');
+                barItem.className = 'bar-item';
+                
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = item.region;
+                
+                const barContainer = document.createElement('div');
+                barContainer.style.flex = '1';
+                barContainer.style.position = 'relative';
+                
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.textContent = item.value;
+                bar.style.width = (item.value / maxValue * 100) + '%';
+                
+                barContainer.appendChild(bar);
+                barItem.appendChild(label);
+                barItem.appendChild(barContainer);
+                container.appendChild(barItem);
+            });
+        }
+        
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            // إضافة تأخير بسيط لضمان تحميل العناصر
+            setTimeout(function() {
+                try {
+                    drawTimelineChart();
+                    drawRegionalChart();
+                } catch (error) {
+                    console.error('خطأ في الرسم:', error);
+                    // عرض رسالة خطأ بسيطة بدلاً من تعطل الصفحة
+                    document.body.innerHTML = '<div style="text-align:center;padding:20px;color:#d90429;">عذراً، حدث خطأ في تحميل البيانات. يرجى تحديث الصفحة.</div>';
+                }
+            }, 100);
+        });
+        
+        // إعادة الرسم عند تغيير حجم النافذة
+        window.addEventListener('resize', function() {
+            // إعادة رسم المخططات بعد تغيير الحجم
+            document.getElementById('timelineChart').innerHTML = '';
+            document.getElementById('regionalChart').innerHTML = '';
+            drawTimelineChart();
+            drawRegionalChart();
         });
     </script>
 </body>
