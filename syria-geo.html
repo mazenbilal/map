@@ -1,0 +1,68 @@
+<!-- مخطط تفاعلي متوافق مع ووردبريس والجوال بخلفية بيضاء واضحة -->
+
+<div id="syriaGeoChart" style="width: 100%; height: 600px; background-color: #fff; padding: 10px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('syriaGeoChart');
+new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: ['الولايات المتحدة', 'روسيا', 'الصين', 'الدول العربية', 'الاقتصاد الداخلي', 'النفوذ الميليشياوي'],
+    datasets: [
+      {
+        label: 'نقاط التأثير على القرار الأممي',
+        data: [85, 70, 60, 75, 40, 90],
+        fill: true,
+        borderColor: 'rgba(0, 102, 204, 1)',
+        backgroundColor: 'rgba(0, 102, 204, 0.15)',
+        pointBackgroundColor: 'rgba(0, 102, 204, 1)'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        angleLines: { color: '#ccc' },
+        grid: { color: '#ddd' },
+        pointLabels: { color: '#111', font: { size: 14, weight: 'bold' } },
+        suggestedMin: 0,
+        suggestedMax: 100,
+        ticks: { color: '#333', backdropColor: '#fff' }
+      }
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: 'توازن القوى حول قرار رفع العقوبات عن سوريا',
+        color: '#000',
+        font: { size: 18, weight: 'bold' }
+      },
+      legend: {
+        labels: { color: '#000', font: { size: 14 } }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        titleColor: '#000',
+        bodyColor: '#000',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        callbacks: {
+          label: function(context) {
+            const labels = [
+              'واشنطن تقود المشروع وتسعى لاحتواء دمشق',
+              'موسكو تخشى خسارة نفوذها في المشرق',
+              'بكين تراقب ملف الإيغور وتبحث عن مكاسب اقتصادية',
+              'الرياض والدوحة وأنقرة تدفع نحو استقرار براغماتي',
+              'الاقتصاد السوري ضعيف ولا يحتكر الدولة أدوات القوة',
+              'الميليشيات تفرض توازنًا موازياً للسلطة المركزية'
+            ];
+            return labels[context.dataIndex];
+          }
+        }
+      }
+    }
+  }
+});
+</script>
