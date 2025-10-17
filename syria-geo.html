@@ -5,48 +5,56 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>توازن القوى حول قرار رفع العقوبات عن سوريا</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: "Noto Naskh Arabic", sans-serif;
+    html,body{
+      margin:0;padding:0;height:100%;background:#ffffff;
+      display:flex;justify-content:center;align-items:center;
+      font-family:'Noto Naskh Arabic',sans-serif;
     }
-    canvas {
-      width: 95vw;
-      height: 90vh;
-      max-width: 720px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    #chartContainer{
+      width:95vw;max-width:720px;height:90vh;
+      background:#fff;border-radius:12px;
+      box-shadow:0 0 10px rgba(0,0,0,0.15);
+      padding:15px;box-sizing:border-box;
     }
+    canvas{width:100%!important;height:100%!important;}
   </style>
 </head>
 <body>
-  <canvas id="syriaGeoChart"></canvas>
+  <div id="chartContainer">
+    <canvas id="syriaGeoChart"></canvas>
+  </div>
 
-  <!-- تحميل مكتبة Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- مكتبة Chart.js من مصدر مضمون -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"
+          integrity="sha512-+C3F4+oOawS/3Cv8wXx4uEq1L3Ff7vK/hUy0UgF0Eq5TQkE2CVD9zzrA3AhvQ+svpp/9gZgib5BRN47zUSYBtw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <!-- تنفيذ الرسم بعد تحميل الصفحة -->
-  <script defer>
-  window.addEventListener('load', function() {
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('syriaGeoChart');
-    if (!ctx) return;
+    if (!ctx) {
+      document.body.innerHTML = '<h2 style="color:#900">لم يتم تحميل الرسم البياني</h2>';
+      return;
+    }
     new Chart(ctx, {
       type: 'radar',
       data: {
-        labels: ['الولايات المتحدة','روسيا','الصين','الدول العربية','الاقتصاد الداخلي','النفوذ الميليشياوي'],
+        labels: [
+          'الولايات المتحدة',
+          'روسيا',
+          'الصين',
+          'الدول العربية',
+          'الاقتصاد الداخلي',
+          'النفوذ الميليشياوي'
+        ],
         datasets: [{
           label: 'نقاط التأثير على القرار الأممي',
           data: [85,70,60,75,40,90],
           fill: true,
           borderColor: 'rgba(0,102,204,1)',
           backgroundColor: 'rgba(0,102,204,0.15)',
-          pointBackgroundColor: 'rgba(0,102,204,1)'
+          pointBackgroundColor: 'rgba(0,102,204,1)',
+          pointBorderColor: '#fff'
         }]
       },
       options: {
@@ -56,7 +64,10 @@
           r: {
             angleLines: { color: '#ccc' },
             grid: { color: '#ddd' },
-            pointLabels: { color: '#111', font: { size: 14, weight: 'bold' } },
+            pointLabels: {
+              color: '#111',
+              font: { size: 14, weight: 'bold' }
+            },
             suggestedMin: 0,
             suggestedMax: 100,
             ticks: { color: '#333', backdropColor: '#fff' }
@@ -69,9 +80,7 @@
             color: '#000',
             font: { size: 18, weight: 'bold' }
           },
-          legend: {
-            labels: { color: '#000', font: { size: 14 } }
-          },
+          legend: { labels: { color: '#000' } },
           tooltip: {
             backgroundColor: 'rgba(255,255,255,0.95)',
             titleColor: '#000',
